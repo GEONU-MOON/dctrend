@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -16,7 +18,29 @@ import icoLogout from "../images/ico_logout.svg";
 import btnTop from "../images/btn_top.svg";
 import { Link } from "react-router-dom";
 
-function Ent() {
+function CategoryPage() {
+  const { categoryId } = useParams();
+  const [newsData, setNewsData] = useState({
+    newsList: { content: [] },
+    resents: [],
+    populars: [],
+  });
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=12&page=1&recentNews=10&popularNews=10`
+      )
+      .then((response) => {
+        if (response.data.message === "success") {
+          setNewsData(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching news data:", error);
+      });
+  }, [categoryId]);
+
   return (
     <div>
       <section className="topWrap">
@@ -75,7 +99,6 @@ function Ent() {
               <Link to="/">
                 <dl className="on">트렌드 뉴스</dl>
               </Link>
-
               <a>
                 <dl>디시이슈</dl>
               </a>
@@ -93,58 +116,30 @@ function Ent() {
                 <Link to="/rank">
                   <dt>랭킹뉴스</dt>
                 </Link>
-                <Link to="/ent">
+                <Link to="/category/14">
                   <dt>연예</dt>
                 </Link>
-                <Link to="/sports">
+                <Link to="/category/15">
                   <dt>스포츠</dt>
                 </Link>
-                <Link to="/currentEvents">
-                  <dt>시사</dt>
+                <Link to="/category/1">
+                  <dt>정치</dt>
                 </Link>
-                <Link to="/economy">
+                <Link to="/category/2">
                   <dt>경제</dt>
                 </Link>
-                <Link to="/society">
+                <Link to="/category/6">
                   <dt>사회</dt>
                 </Link>
-                <Link to="/cult">
+                <Link to="/category/10">
                   <dt>문화</dt>
                 </Link>
-                <Link to="/It">
-                  <dt>IT</dt>
+                <Link to="/category/9999">
+                  <dt>기타</dt>
                 </Link>
               </dl>
             </li>
           </ul>
-        </div>
-      </section>
-
-      <section id="sticky" className="stickyWrap" style={{ display: "none" }}>
-        <div className="inBox">
-          <div className="logo">
-            <img src={logo} alt="logo" />
-          </div>
-          <div className="menu">
-            <ul className="on">트렌드 뉴스</ul>
-            <ul>디시이슈</ul>
-            <ul>디시인터뷰</ul>
-          </div>
-          <div className="pc">
-            <ul className="search">
-              <Link to="/">
-                <img src={icoSearch} alt="search icon" />
-              </Link>
-            </ul>
-            <ul className="btn">
-              <img src={icoTicket} alt="ticket" />
-              투표권 구매
-            </ul>
-            <ul className="login">로그인</ul>
-          </div>
-          <div className="mo slideMenuOpen">
-            <img src={btnMenu} alt="menu" />
-          </div>
         </div>
       </section>
 
@@ -153,46 +148,23 @@ function Ent() {
           <div className="leftWrap">
             <div className="newsList">
               <div className="list">
-                <ul className="hoverImgPt" onClick={() => {}}>
-                  <div className="thumb">
-                    <img
-                      src="https://img.sportsworldi.com/content/image/2024/07/09/20240709503590.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <li className="tit">
-                    활동 중단했던 리아 복귀…있지, 하반기 완전체 앨범 발매
-                  </li>
-                  <li className="txt">
-                    JYP엔터테인먼트는 지난 8일 오후 공식 SNS 채널을 통해 ITZY
-                    리아의 복귀 소식을 알렸다. 이에 따르면 리아는 하반기 발매
-                    예정인 ITZY의 새 앨범을 시작으로 본격적인 활동에 임할
-                    예정이다.
-                  </li>
-                  <li className="info">스포츠월드</li>
-                </ul>
-                <ul className="hoverImgPt" onClick={() => {}}>
-                  <div className="thumb">
-                    <img
-                      src="https://thumb.mtstarnews.com/06/2024/07/2024071816474659725_1.jpg/dims/optimize/"
-                      alt=""
-                    />
-                  </div>
-                  <li className="tit">
-                    '여장한' 조정석, 女 속옷 입고 하이힐 질주.."배우의 숙명이죠"
-                  </li>
-                  <li className="txt">
-                    배우 조정석이 '파격 변신'을 앞세워 코미디의 '정석'을
-                    보여줬다. 영화 '파일럿'을 통해 원톱 주연으로 나선
-                    조정석에게는 부담감도, 어려움도 없었다. '역시'라는 감탄이
-                    절로 나올 정도로 자신의 진가를 발휘하는 조정석이다.
-                  </li>
-                  <li className="info">스포츠월드</li>
-                </ul>
+                {newsData.newsList.content.map((news) => (
+                  <ul className="hoverImgPt" key={news.newsId}>
+                    <div className="thumb">
+                      <img src={news.thumbnail} alt={news.title} />
+                    </div>
+                    <li className="tit">{news.title}</li>
+                    <li className="txt">
+                      <div dangerouslySetInnerHTML={{ __html: news.content }} />
+                    </li>
+                    <li className="info">{news.pressName}</li>
+                  </ul>
+                ))}
               </div>
               <div className="paging"></div>
             </div>
           </div>
+
           <div className="rightWrap">
             <div className="rightSticky">
               <div className="stickyTitle">랭킹 뉴스</div>
@@ -209,93 +181,60 @@ function Ent() {
                     }}
                     autoplay={{ delay: 2000, disableOnInteraction: false }}
                   >
-                    <SwiperSlide>
-                      <div className="rankBox">
-                        <div className="box">
-                          <div className="rankTitle">
-                            아이돌 걸그룹 랭킹<div className="arw s24"></div>
-                          </div>
-                          <div className="rank">
-                            <Swiper
-                              direction="vertical"
-                              slidesPerView={1}
-                              loop={true}
-                            >
-                              <SwiperSlide>
-                                <ul>
-                                  <li className="num">1</li>
-                                  <li className="thumb">
-                                    <img
-                                      src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
-                                      alt=""
-                                    />
-                                  </li>
-                                  <li className="title">뉴진스</li>
-                                  <li className="vote">4,224표</li>
-                                </ul>
-                              </SwiperSlide>
-                            </Swiper>
-                          </div>
-                          <div className="news">
-                            <ul className="on hoverImgPt">
-                              <li className="num">1</li>
-                              <li className="title">
-                                혜인 합류…뉴진스 완전체 국내 음방 무대 선보인다
-                              </li>
-                              <li className="thumb">
-                                <img
-                                  src="https://img.etoday.co.kr/pto_db/2024/06/600/20240608095743_2034978_1200_901.jpg"
-                                  alt=""
-                                />
-                              </li>
-                            </ul>
-                            <ul className="hoverImgPt">
-                              <li className="num">2</li>
-                              <li className="title">
-                                에스파 '슈퍼노바', 스포티파이 1억 스트리밍
-                                달성…통산 10번째
-                              </li>
-                              <li className="thumb">
-                                <img
-                                  src="https://thumb.mt.co.kr/06/2024/07/2024071016194159841_1.jpg/dims/optimize/"
-                                  alt=""
-                                />
-                              </li>
-                            </ul>
+                    {newsData.populars.map((popular, index) => (
+                      <SwiperSlide key={popular.newsId}>
+                        <div className="rankBox">
+                          <div className="box">
+                            <div className="rankTitle">
+                              인기 뉴스 {index + 1}
+                              <div className="arw s24"></div>
+                            </div>
+                            <div className="news">
+                              <ul className="hoverImgPt">
+                                <li className="num">{index + 1}</li>
+                                <li className="title">{popular.title}</li>
+                                <li className="thumb">
+                                  <img
+                                    src={popular.thumbnail}
+                                    alt={popular.title}
+                                  />
+                                </li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
+                    ))}
                   </Swiper>
                   <div className="swiper-button-next"></div>
                   <div className="swiper-button-prev"></div>
                   <div className="swiper-pagination"></div>
                 </div>
-                <div className="stickyTitle">실시간 인기기사</div>
-                <div className="popularNewsRight">
-                  <ul>
-                    <li>1</li>
-                    <li>조승우, 조정석에 "네가 뭔데 아이유랑 드라마" 버럭</li>
+              </div>
+
+              <div className="stickyTitle">실시간 인기기사</div>
+              <div className="popularNewsRight">
+                {newsData.resents.map((recent, index) => (
+                  <ul key={recent.newsId}>
+                    <li>{index + 1}</li>
+                    <li>{recent.title}</li>
                     <li>
-                      <img
-                        src="https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BB1q8FPR.img?w=650&h=360&m=6&x=361&y=86&s=125&d=125"
-                        alt=""
-                      />
+                      <img src={recent.thumbnail} alt={recent.title} />
                     </li>
                   </ul>
-                </div>
+                ))}
               </div>
+
               <div className="stickyTitle">최신 기사</div>
               <div className="rtNewsRight">
-                <ul>
-                  <li>
-                    <img
-                      src="https://dispatch.cdnser.be/cms-content/uploads/2024/07/25/c31cc2dc-fb84-4331-915d-b0e3bd1f0593.jpg"
-                      alt=""
-                    />
-                  </li>
-                  <li>'위키드', 11월 20일에 본다…韓서, 전 세계 최초 개봉</li>
-                </ul>
+                {newsData.newsList.content.slice(0, 5).map((recent) => (
+                  <ul key={recent.newsId}>
+                    <li>
+                      <img src={recent.thumbnail} alt={recent.title} />
+                    </li>
+                    <li>{recent.title}</li>
+                  </ul>
+                ))}
               </div>
             </div>
           </div>
@@ -389,4 +328,4 @@ function Ent() {
   );
 }
 
-export default Ent;
+export default CategoryPage;

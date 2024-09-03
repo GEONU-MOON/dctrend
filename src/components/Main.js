@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -10,6 +12,21 @@ import icoSearch from "../images/ico_search.svg";
 import icoTicket from "../images/ico_ticket.png";
 
 function Main() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://api.trend.rankify.best/api/v1/news/categories")
+      .then((response) => {
+        if (response.data.message === "success") {
+          setCategories(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
   return (
     <div>
       <section className="topWrap">
@@ -82,30 +99,11 @@ function Main() {
                 <Link to="/">
                   <dt className="on">전체</dt>
                 </Link>
-                <Link to="/rank">
-                  <dt>랭킹뉴스</dt>
-                </Link>
-                <Link to="/ent">
-                  <dt>연예</dt>
-                </Link>
-                <Link to="/sports">
-                  <dt>스포츠</dt>
-                </Link>
-                <Link to="/currentEvents">
-                  <dt>시사</dt>
-                </Link>
-                <Link to="/economy">
-                  <dt>경제</dt>
-                </Link>
-                <Link to="/society">
-                  <dt>사회</dt>
-                </Link>
-                <Link to="/cult">
-                  <dt>문화</dt>
-                </Link>
-                <Link to="/It">
-                  <dt>IT</dt>
-                </Link>
+                {categories.map((category) => (
+                  <Link key={category.id} to={`/category/${category.id}`}>
+                    <dt>{category.name}</dt>
+                  </Link>
+                ))}
               </dl>
             </li>
           </ul>
