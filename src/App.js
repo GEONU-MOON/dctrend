@@ -1,13 +1,18 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Ent from "./components/Ent.js";
+import Home from "./components/Main.js";
 import "./css/common.css";
 import "./css/layout.css";
-import Main from "./components/Main";
 
 function App() {
   return (
-    <div className="App">
-      <Main />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ent" element={<Ent />} />
+      </Routes>
+    </Router>
   );
 }
 

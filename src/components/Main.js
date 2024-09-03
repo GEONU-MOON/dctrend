@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -25,9 +26,9 @@ function Main() {
         </div>
         <div className="top">
           <div className="logo">
-            <a href="../main/main.html">
+            <Link to="/">
               <img src={logo} alt="logos" />
-            </a>
+            </Link>
           </div>
           <div className="section">
             <ul className="on">뉴스</ul>
@@ -78,33 +79,33 @@ function Main() {
           <ul className="dep2">
             <li className="menu">
               <dl className="on">
-                <a href="../main/main.html">
+                <Link to="/">
                   <dt className="on">전체</dt>
-                </a>
-                <a href="../main/rank.html">
+                </Link>
+                <Link to="/rank">
                   <dt>랭킹뉴스</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/ent">
                   <dt>연예</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/sports">
                   <dt>스포츠</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/currentEvents">
                   <dt>시사</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/economy">
                   <dt>경제</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/society">
                   <dt>사회</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/cult">
                   <dt>문화</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/It">
                   <dt>IT</dt>
-                </a>
+                </Link>
               </dl>
             </li>
           </ul>
