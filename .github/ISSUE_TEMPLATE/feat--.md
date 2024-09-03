@@ -1,7 +1,7 @@
 ---
 name: 'feat: '
-about: Describe this issue template's purpose here.
-title: ''
+about: feature
+title: 'feat:'
 labels: ''
 assignees: ''
 
