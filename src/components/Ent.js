@@ -33,9 +33,9 @@ function Ent() {
         </div>
         <div className="top">
           <div className="logo">
-            <a href="../main/main.html">
+            <Link to="/">
               <img src={logo} alt="logo" />
-            </a>
+            </Link>
           </div>
           <div className="section">
             <ul className="on">뉴스</ul>
@@ -55,7 +55,7 @@ function Ent() {
                   alt="search icon"
                 />
               </div>
-              <a href="../search/search.html">
+              <a>
                 <img className="openSearch" src={icoSearch} alt="open search" />
               </a>
             </ul>
@@ -72,13 +72,14 @@ function Ent() {
         <div className="menuBox">
           <ul className="dep1">
             <li className="menu">
-              <a href="../main/main.html">
+              <Link to="/">
                 <dl className="on">트렌드 뉴스</dl>
-              </a>
-              <a href="../issue/main.html">
+              </Link>
+
+              <a>
                 <dl>디시이슈</dl>
               </a>
-              <a href="../interview/main.html">
+              <a>
                 <dl>디시인터뷰</dl>
               </a>
             </li>
@@ -87,33 +88,32 @@ function Ent() {
             <li className="menu">
               <dl className="on">
                 <Link to="/">
-                  <dt>전체</dt>
+                  <dt className="on">전체</dt>
                 </Link>
-
-                <a href="../main/rank.html">
+                <Link to="/rank">
                   <dt>랭킹뉴스</dt>
-                </a>
-                <a href="../main/ent.html">
-                  <dt className="on">연예</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/ent">
+                  <dt>연예</dt>
+                </Link>
+                <Link to="/sports">
                   <dt>스포츠</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/currentEvents">
                   <dt>시사</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/economy">
                   <dt>경제</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/society">
                   <dt>사회</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/cult">
                   <dt>문화</dt>
-                </a>
-                <a href="../main/ent.html">
+                </Link>
+                <Link to="/It">
                   <dt>IT</dt>
-                </a>
+                </Link>
               </dl>
             </li>
           </ul>
@@ -132,9 +132,9 @@ function Ent() {
           </div>
           <div className="pc">
             <ul className="search">
-              <a href="../main/main.html">
+              <Link to="/">
                 <img src={icoSearch} alt="search icon" />
-              </a>
+              </Link>
             </ul>
             <ul className="btn">
               <img src={icoTicket} alt="ticket" />

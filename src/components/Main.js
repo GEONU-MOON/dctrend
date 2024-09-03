@@ -751,7 +751,7 @@ function Main() {
           <div className="search">
             <img src="../images/ico_search_gray.svg" alt="" />
             <input
-              name="search" // 변경된 부분
+              name="search"
               type="text"
               placeholder="검색어를 입력하세요"
             />
