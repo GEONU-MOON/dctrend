@@ -48,7 +48,7 @@ function Main() {
                   alt="Search Icon"
                 />
               </div>
-              <a href="../search/search.html">
+              <a>
                 <img className="openSearch" src={icoSearch} alt="Open Search" />
               </a>
             </ul>
@@ -65,13 +65,13 @@ function Main() {
         <div className="menuBox">
           <ul className="dep1">
             <li className="menu">
-              <a href="../main/main.html">
+              <Link to="/">
                 <dl className="on">트렌드 뉴스</dl>
-              </a>
-              <a href="../issue/main.html">
+              </Link>
+              <a>
                 <dl>디시이슈</dl>
               </a>
-              <a href="../interview/main.html">
+              <a>
                 <dl>디시인터뷰</dl>
               </a>
             </li>
@@ -124,7 +124,7 @@ function Main() {
           </div>
           <div className="pc">
             <ul className="search">
-              <a href="../main/main.html">
+              <a>
                 <img src="../images/ico_search.svg" alt="" />
               </a>
             </ul>
