@@ -166,7 +166,23 @@ function Main() {
               <ul className="hoverImgPt">
                 <li className="thumb">
                   <img
-                    src="https://image.xportsnews.com/contents/images/upload/article/2024/07/24/mb_1716106571678771.jpeg"
+                    src="https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/X3HJRUQQIDKZBCAC62XHQQIKKI.jpg"
+                    alt=""
+                  />
+                </li>
+                <li className="title">
+                  '헹크 이적설' 오현규, '손흥민 옛 스승' 핑크 감독이 부른다
+                </li>
+                <li className="txt">
+                  국가대표 출신 공격수 오현규가 셀틱(스코틀랜드)을 떠나
+                  헹크(벨기에)로 향할까. 유력 매체와 벨기에 현지 보도가 나오면서
+                  탄력을 얻고 있다.
+                </li>
+              </ul>
+              <ul className="hoverImgPt">
+                <li className="thumb">
+                  <img
+                    src="https://file2.nocutnews.co.kr/newsroom/image/2024/07/24/202407241227143621_0.jpg"
                     alt=""
                   />
                 </li>
