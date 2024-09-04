@@ -55,9 +55,7 @@ function Header({ categories }) {
         <ul className="dep1">
           <li className="menu">
             <Link to="/">
-              <dl className={location.pathname === "/" ? "on" : ""}>
-                트렌드 뉴스
-              </dl>
+              <dl className="on">트렌드 뉴스</dl>
             </Link>
             <a>
               <dl>디시이슈</dl>
