@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../images/logo.svg";
 import icoSearch from "../../images/ico_search.svg";
 import icoTicket from "../../images/ico_ticket.png";
 
 function Header({ categories }) {
+  const location = useLocation();
+
   return (
     <section className="topWrap">
       <div className="naviDc">
@@ -25,7 +27,7 @@ function Header({ categories }) {
           </Link>
         </div>
         <div className="section">
-          <ul className="on">뉴스</ul>
+          <ul className={location.pathname === "/" ? "on" : ""}>뉴스</ul>
           <ul>랭킹</ul>
         </div>
         <div className="pc">
@@ -53,7 +55,9 @@ function Header({ categories }) {
         <ul className="dep1">
           <li className="menu">
             <Link to="/">
-              <dl className="on">트렌드 뉴스</dl>
+              <dl className={location.pathname === "/" ? "on" : ""}>
+                트렌드 뉴스
+              </dl>
             </Link>
             <a>
               <dl>디시이슈</dl>
@@ -67,11 +71,19 @@ function Header({ categories }) {
           <li className="menu">
             <dl className="on">
               <Link to="/">
-                <dt className="on">전체</dt>
+                <dt className={location.pathname === "/" ? "on" : ""}>전체</dt>
               </Link>
               {categories.map((category) => (
                 <Link key={category.id} to={`/category/${category.id}`}>
-                  <dt>{category.name}</dt>
+                  <dt
+                    className={
+                      location.pathname === `/category/${category.id}`
+                        ? "on"
+                        : ""
+                    }
+                  >
+                    {category.name}
+                  </dt>
                 </Link>
               ))}
             </dl>

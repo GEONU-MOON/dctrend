@@ -134,7 +134,7 @@ function CategoryPage() {
 
               <div className="stickyTitle">실시간 인기기사</div>
               <div className="popularNewsRight">
-                {newsData.resents.map((recent, index) => (
+                {newsData.resents.slice(0, 5).map((recent, index) => (
                   <ul key={recent.newsId}>
                     <li>{index + 1}</li>
                     <li>{recent.title}</li>
@@ -147,7 +147,7 @@ function CategoryPage() {
 
               <div className="stickyTitle">최신 기사</div>
               <div className="rtNewsRight">
-                {newsData.newsList.content.slice(0, 5).map((recent) => (
+                {newsData.newsList.content.slice(0, 4).map((recent) => (
                   <ul key={recent.newsId}>
                     <li>
                       <img src={recent.thumbnail} alt={recent.title} />
