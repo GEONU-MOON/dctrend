@@ -1137,10 +1137,10 @@ function Main() {
                       전체 순위 보러가기<div className="arwBlue s16"></div>
                     </div>
                   </ul>
-                </SwiperSlide>
+                </SwiperSlide>{" "}
+                <div className="swiper-button-next"></div>
+                <div className="swiper-button-prev"></div>
               </Swiper>
-              <div className="swiper-button-next"></div>
-              <div className="swiper-button-prev"></div>
             </div>
           </div>
         </div>
