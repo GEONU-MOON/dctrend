@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import { Navigation } from "swiper/modules";
 
 function Main() {
   const [setCategories] = useState([]);
@@ -20,7 +22,7 @@ function Main() {
       .catch((error) => {
         console.error("Error fetching categories:", error);
       });
-  }, []);
+  });
 
   return (
     <div>
@@ -258,7 +260,7 @@ function Main() {
             <div className="rankChart">
               <div className="rankBox">
                 <div className="rankTitle">
-                  아이돌 걸그룹 랭킹<div className="arw s24"></div>
+                  아이돌 걸그룹 랭킹 <div className="arw s24"></div>
                 </div>
                 <div className="box">
                   <div className="rank">
@@ -276,7 +278,7 @@ function Main() {
                           <li className="thumb">
                             <img
                               src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
-                              alt=""
+                              alt="뉴진스"
                             />
                           </li>
                           <li className="title">뉴진스</li>
@@ -289,7 +291,7 @@ function Main() {
                           <li className="thumb">
                             <img
                               src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
-                              alt=""
+                              alt="에스파"
                             />
                           </li>
                           <li className="title">에스파</li>
@@ -302,7 +304,7 @@ function Main() {
                           <li className="thumb">
                             <img
                               src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
-                              alt=""
+                              alt="아이브"
                             />
                           </li>
                           <li className="title">아이브</li>
@@ -315,7 +317,7 @@ function Main() {
                           <li className="thumb">
                             <img
                               src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
-                              alt=""
+                              alt="QWER"
                             />
                           </li>
                           <li className="title">QWER</li>
@@ -328,7 +330,7 @@ function Main() {
                           <li className="thumb">
                             <img
                               src="https://image.xportsnews.com/contents/images/upload/article/2024/0519/mb_1716106571678771.jpeg"
-                              alt=""
+                              alt="아일릿"
                             />
                           </li>
                           <li className="title">아일릿</li>
@@ -337,6 +339,8 @@ function Main() {
                       </SwiperSlide>
                     </Swiper>
                   </div>
+
+                  {/* 뉴스 목록 */}
                   <div className="news">
                     <ul className="on hoverImgPt">
                       <li className="num">1</li>
@@ -346,7 +350,7 @@ function Main() {
                       <li className="thumb">
                         <img
                           src="https://img.etoday.co.kr/pto_db/2024/06/600/20240608095743_2034978_1200_901.jpg"
-                          alt=""
+                          alt="혜인 합류"
                         />
                       </li>
                     </ul>
@@ -359,7 +363,7 @@ function Main() {
                       <li className="thumb">
                         <img
                           src="https://thumb.mt.co.kr/06/2024/07/2024071016194159841_1.jpg/dims/optimize/"
-                          alt=""
+                          alt="에스파 슈퍼노바"
                         />
                       </li>
                     </ul>
@@ -371,7 +375,7 @@ function Main() {
                       <li className="thumb">
                         <img
                           src="https://contents-cdn.viewus.co.kr/image/2023/12/CP-2022-0017/image-de4d5a79-bbe3-4c2e-84a7-f36976345663.jpeg"
-                          alt=""
+                          alt="아이브 안유진"
                         />
                       </li>
                     </ul>
@@ -383,7 +387,7 @@ function Main() {
                       <li className="thumb">
                         <img
                           src="https://www.cbci.co.kr/news/photo/202407/470830_279178_189.jpg"
-                          alt=""
+                          alt="QWER"
                         />
                       </li>
                     </ul>
@@ -396,7 +400,306 @@ function Main() {
                       <li className="thumb">
                         <img
                           src="https://image.xportsnews.com/contents/images/upload/article/2024/0519/mb_1716106571678771.jpeg"
-                          alt=""
+                          alt="아일릿 원희"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rankBox">
+                <div className="rankTitle">
+                  트로트 가수 랭킹 <div className="arw s24"></div>
+                </div>
+                <div className="box">
+                  <div className="rank">
+                    <Swiper
+                      className="rankRoll"
+                      direction="vertical"
+                      slidesPerView={1}
+                      spaceBetween={0}
+                      loop={true}
+                      autoplay={{ delay: 2000, disableOnInteraction: false }}
+                    >
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">1</li>
+                          <li className="thumb">
+                            <img
+                              src="https://newsimg.hankookilbo.com/cms/articlerelease/2021/10/07/c3f00183-307b-4530-a48b-f628e54bdf61.jpg"
+                              alt="임영웅"
+                            />
+                          </li>
+                          <li className="title">임영웅</li>
+                          <li className="vote">8,187표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">2</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="전유진"
+                            />
+                          </li>
+                          <li className="title">전유진</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">3</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="이미나"
+                            />
+                          </li>
+                          <li className="title">이미나</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">4</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="이찬원"
+                            />
+                          </li>
+                          <li className="title">이찬원</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">5</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="박서진"
+                            />
+                          </li>
+                          <li className="title">박서진</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                    </Swiper>
+                  </div>
+
+                  {/* 트로트 가수 뉴스 */}
+                  <div className="news">
+                    <ul className="on hoverImgPt">
+                      <li className="num">1</li>
+                      <li className="title">
+                        임영웅은 팬클럽 이름으로,‘영웅시대’는 스타 빛내려 기부
+                        “善순환”
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202309/26/27ccde99-eb16-49f8-a91b-d263a5def658.jpg"
+                          alt="임영웅 기부"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">2</li>
+                      <li className="title">
+                        전유진, '현역가왕’ 1위 등극...‘트롯계 뉴진스’
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://www.dgmagazine.co.kr/news/photo/202402/5119_5970_3623.jpg"
+                          alt="전유진"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">3</li>
+                      <li className="title">
+                        최상위권 싹쓸이! 트롯 오디션 10대 열풍 이유
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://ilyo.co.kr/contents/article/images/2024/0131/1706666626470115.jpg"
+                          alt="트롯 오디션 열풍"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">4</li>
+                      <li className="title">
+                        이찬원 남동생, 얼마나 잘생겼길래… “아이돌 못지않은 인기”
+                        (‘한끗차이’)
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://d2fc09gk1936lv.cloudfront.net/kbs/866x487/scf.static.kbs.co.kr/image/NBCONTENTSMYLOVEKBS/NBCONTENTSMYLOVEKBS_70000000398553_20220811_20220811145000_master_images_01.jpg"
+                          alt="이찬원 남동생"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">5</li>
+                      <li className="title">
+                        박서진, '살림남' 10kg이상 감량한 서진 왕자의 다이어트
+                        비결
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://image.xportsnews.com/contents/images/upload/article/2024/0124/mb_1706052857115155.jpg"
+                          alt="박서진 다이어트"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rankBox">
+                <div className="rankTitle">
+                  예능 방송인 랭킹 <div className="arw s24"></div>
+                </div>
+                <div className="box">
+                  <div className="rank">
+                    <Swiper
+                      className="rankRoll"
+                      direction="vertical"
+                      slidesPerView={1}
+                      spaceBetween={0}
+                      loop={true}
+                      autoplay={{ delay: 2000, disableOnInteraction: false }}
+                    >
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">1</li>
+                          <li className="thumb">
+                            <img
+                              src="https://img.tvreportcdn.de/cms-content/uploads/2024/05/10/55571fb3-142e-4439-be30-ed3a33f4ed3e.jpg"
+                              alt="유재석"
+                            />
+                          </li>
+                          <li className="title">유재석</li>
+                          <li className="vote">5,806표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">2</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="이효리"
+                            />
+                          </li>
+                          <li className="title">이효리</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">3</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="신동엽"
+                            />
+                          </li>
+                          <li className="title">신동엽</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">4</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="박명수"
+                            />
+                          </li>
+                          <li className="title">박명수</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul>
+                          <li className="num">5</li>
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="주우재"
+                            />
+                          </li>
+                          <li className="title">주우재</li>
+                          <li className="vote">4,224표</li>
+                        </ul>
+                      </SwiperSlide>
+                    </Swiper>
+                  </div>
+
+                  <div className="news">
+                    <ul className="on hoverImgPt">
+                      <li className="num">1</li>
+                      <li className="title">
+                        유재석, '전세살이' 끝…논현동 아파트 87억에 샀다
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://cdn.hankyung.com/photo/202405/03.36641895.1.jpg"
+                          alt="유재석 아파트"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">2</li>
+                      <li className="title">
+                        “광고 다시 할게요” 이효리, 5개월 만 42억 벌었다
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://wimg.mk.co.kr/news/cms/202312/18/news-p.v1.20231218.bc9f75c329b14bafb165c208e16b2084_P1.png"
+                          alt="이효리 광고"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">3</li>
+                      <li className="title">
+                        신동엽 금연 비화 공개, 금연 힘들 때 시도해야 할 것은?
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://health.chosun.com/site/data/img_dir/2019/09/16/2019091600778_0.jpg"
+                          alt="신동엽 금연"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">4</li>
+                      <li className="title">
+                        박명수, ‘1박2일’ 바가지 논란 지적 “지역 경제 망친다”
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://images.khan.co.kr/article/2023/06/09/news-p.v1.20230609.cf6f291af6444aa4afba76e5d7b58f2d_P1.jpg"
+                          alt="박명수 논란"
+                        />
+                      </li>
+                    </ul>
+                    <ul className="hoverImgPt">
+                      <li className="num">5</li>
+                      <li className="title">
+                        "의류사업 대박나 돈방석" 주우재, 홍대 한학기 남기고
+                        자퇴한 사연
+                      </li>
+                      <li className="thumb">
+                        <img
+                          src="https://thumb.mt.co.kr/06/2022/07/2022070419225617358_1.jpg/dims/optimize/"
+                          alt="주우재 자퇴"
                         />
                       </li>
                     </ul>
@@ -600,7 +903,248 @@ function Main() {
           </div>
         </div>
       </section>
+      <section className="contentsWrap">
+        <div className="trendNewsWrap">
+          {/* 실시간 랭킹 차트 */}
+          <div className="sectionTitle">
+            <div className="title">실시간 랭킹 차트</div>
+            <div className="more">
+              랭킹뉴스 더보기<div className="arw s16"></div>
+            </div>
+          </div>
 
+          {/* Keyword Rank Section */}
+          <div className="keywordRank">
+            <div className="keyword">
+              <div className="items">
+                <Swiper
+                  className="keywordItems"
+                  slidesPerView="auto"
+                  spaceBetween={8}
+                >
+                  <SwiperSlide>
+                    <ul>치어리더</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul className="on">여자아이돌</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul>남자트로트가수</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul>국내애니메이션</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul>K-POP</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul>여자BJ</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul>리그오브레전드챔피언</ul>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <ul>여자아나운서</ul>
+                  </SwiperSlide>
+                </Swiper>
+              </div>
+            </div>
+
+            <div className="result">
+              <Swiper
+                className="keywordResult"
+                slidesPerView="auto"
+                spaceBetween={16}
+                navigation={{
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                }}
+                modules={[Navigation]}
+              >
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://images.khan.co.kr/article/2021/11/15/l_2021111502000877900178361.jpg"
+                        alt="안유진"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank up">1위</dl>
+                      <dl className="name">안유진</dl>
+                    </li>
+                    <li className="cate">아이브</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOdSSercqwddDwQ7i0DnMCfZJS7iF-7T4uAQ&s"
+                        alt="카리나"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">2위</dl>
+                      <dl className="name">카리나</dl>
+                    </li>
+                    <li className="cate">에스파</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://news.nateimg.co.kr/orgImg/mk/2023/04/14/news-p.v1.20230414.15e6ac6d76a84ab398281046dc858116_P1.jpg"
+                        alt="제니"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">3위</dl>
+                      <dl className="name">제니</dl>
+                    </li>
+                    <li className="cate">블랙핑크</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://i.namu.wiki/i/pWjwjQ8g8PHy37F-IQvM0qmUH6-NhCH0mLeMGrBArerxV_eATwJT_7rgdHcUhWZrRWG-TF7nMY7BiD0YSu5Tbg.webp"
+                        alt="하니"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">4위</dl>
+                      <dl className="name">하니</dl>
+                    </li>
+                    <li className="cate">뉴진스</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://cdn.stardailynews.co.kr/news/photo/202403/440426_459339_3331.jpg"
+                        alt="장원영"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">5위</dl>
+                      <dl className="name">장원영</dl>
+                    </li>
+                    <li className="cate">아이브</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://www.biztribune.co.kr/news/photo/201903/202889_53060_2944.jpg"
+                        alt="아이린"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">6위</dl>
+                      <dl className="name">아이린</dl>
+                    </li>
+                    <li className="cate">레드벨벳</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://yt3.googleusercontent.com/_f3q_MahOBcj6xFmGjOVj0cQa57-TEm_oONad89YZGnmJqLRzVvPh0U71loMN2O3uHLs4su9Wg=s900-c-k-c0x00ffffff-no-rj"
+                        alt="설현"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">7위</dl>
+                      <dl className="name">설현</dl>
+                    </li>
+                    <li className="cate">AOA</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://entertainimg.kbsmedia.co.kr/cms/uploads/PERSON_20230203085950_b66e8c930af1aa131737caf32ab3b884.jpg"
+                        alt="미미"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">8위</dl>
+                      <dl className="name">미미</dl>
+                    </li>
+                    <li className="cate">오마이걸</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://wimg.mk.co.kr/news/cms/202401/16/news-p.v1.20240116.bbda7ab732c844ae9270e10b16592d4a_P1.jpeg"
+                        alt="민지"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">9위</dl>
+                      <dl className="name">민지</dl>
+                    </li>
+                    <li className="cate">뉴진스</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul>
+                    <li className="thumb">
+                      <img
+                        src="https://ojsfile.ohmynews.com/STD_IMG_FILE/2023/0905/IE003199721_STD.jpg"
+                        alt="해린"
+                      />
+                    </li>
+                    <li className="info">
+                      <dl className="rank same">10위</dl>
+                      <dl className="name">해린</dl>
+                    </li>
+                    <li className="cate">뉴진스</li>
+                    <li className="vote">4,224표</li>
+                    <li className="btn">투표</li>
+                  </ul>
+                </SwiperSlide>{" "}
+                <SwiperSlide>
+                  <ul className="more">
+                    <div className="all">
+                      전체 순위 보러가기<div className="arwBlue s16"></div>
+                    </div>
+                  </ul>
+                </SwiperSlide>
+              </Swiper>
+              <div className="swiper-button-next"></div>
+              <div className="swiper-button-prev"></div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="slideMenu">
         <div className="top">
           <ul className="logo">
