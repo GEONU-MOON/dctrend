@@ -26,6 +26,21 @@ function CategoryPage() {
     populars: [],
   });
 
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://api.trend.rankify.best/api/v1/news/categories")
+      .then((response) => {
+        if (response.data.message === "success") {
+          setCategories(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
   useEffect(() => {
     axios
       .get(
@@ -117,30 +132,11 @@ function CategoryPage() {
                 <Link to="/">
                   <dt className="on">전체</dt>
                 </Link>
-                <Link to="/rank">
-                  <dt>랭킹뉴스</dt>
-                </Link>
-                <Link to="/category/14">
-                  <dt>연예</dt>
-                </Link>
-                <Link to="/category/15">
-                  <dt>스포츠</dt>
-                </Link>
-                <Link to="/category/1">
-                  <dt>정치</dt>
-                </Link>
-                <Link to="/category/2">
-                  <dt>경제</dt>
-                </Link>
-                <Link to="/category/6">
-                  <dt>사회</dt>
-                </Link>
-                <Link to="/category/10">
-                  <dt>문화</dt>
-                </Link>
-                <Link to="/category/9999">
-                  <dt>기타</dt>
-                </Link>
+                {categories.map((category) => (
+                  <Link key={category.id} to={`/category/${category.id}`}>
+                    <dt>{category.name}</dt>
+                  </Link>
+                ))}
               </dl>
             </li>
           </ul>
