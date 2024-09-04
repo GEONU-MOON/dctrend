@@ -41,6 +41,10 @@ function CategoryPage() {
       });
   }, [categoryId]);
 
+  const stripImages = (htmlContent) => {
+    return htmlContent.replace(/<img[^>]*>/g, "");
+  };
+
   return (
     <div>
       <section className="topWrap">
@@ -155,7 +159,11 @@ function CategoryPage() {
                     </div>
                     <li className="tit">{news.title}</li>
                     <li className="txt">
-                      <div dangerouslySetInnerHTML={{ __html: news.content }} />
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: stripImages(news.content),
+                        }}
+                      />
                     </li>
                     <li className="info">{news.pressName}</li>
                   </ul>
@@ -174,7 +182,7 @@ function CategoryPage() {
                     modules={[Navigation, Pagination, Autoplay]}
                     slidesPerView={1}
                     spaceBetween={0}
-                    pagination={{ el: ".swiper-pagination" }}
+                    pagination={{ el: ".swiper-pagination", clickable: true }}
                     navigation={{
                       nextEl: ".swiper-button-next",
                       prevEl: ".swiper-button-prev",
@@ -200,15 +208,15 @@ function CategoryPage() {
                                   />
                                 </li>
                               </ul>
+                              <div className="swiper-button-next"></div>
+                              <div className="swiper-button-prev"></div>
+                              <div className="swiper-pagination"></div>
                             </div>
                           </div>
                         </div>
                       </SwiperSlide>
                     ))}
                   </Swiper>
-                  <div className="swiper-button-next"></div>
-                  <div className="swiper-button-prev"></div>
-                  <div className="swiper-pagination"></div>
                 </div>
               </div>
 
