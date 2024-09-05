@@ -36,7 +36,7 @@ function CategoryPage() {
       .catch((error) => {
         console.error("Error fetching categories:", error);
       });
-  }, []);
+  });
 
   useEffect(() => {
     axios
