@@ -141,32 +141,70 @@ function NewsDetailPage() {
                 <div className="dcTitle">
                   실시간 인기투표<div className="arw s24"></div>
                 </div>
-                <Swiper
-                  className="dcTrendRoll"
-                  direction="vertical"
-                  slidesPerView="auto"
-                  spaceBetween={0}
-                >
-                  {recents.map((recent, index) => (
-                    <SwiperSlide key={recent.newsId}>
-                      <ul className="hoverImgPt">
-                        <li className="thumb">
-                          <img src={recent.thumbnail} alt={recent.title} />
-                        </li>
-                        <li className="info">
-                          <dl className="title">{recent.title}</dl>
-                        </li>
-                      </ul>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                <div className="swiper dcTrendRoll">
+                  <div className="swiper-wrapper">
+                    <Swiper
+                      direction={"vertical"}
+                      slidesPerView={"auto"}
+                      spaceBetween={0}
+                      className="swiper-slide"
+                    >
+                      <SwiperSlide>
+                        <ul className="hoverImgPt">
+                          <li className="thumb">
+                            <img
+                              src="https://i.namu.wiki/i/02Nd3r5_9XyQO8S9LMYQoVTCnsWO-NqYQf3N_PJYZmuxYOhJj5s9n9H66lozbQ9xB0zYl3GGRT3yzWiyVlTnWw.webp"
+                              alt="치어리더"
+                            />
+                          </li>
+                          <li className="info">
+                            <dl className="date">23.06.14 ~ 24.06.30</dl>
+                            <dl className="title">아이돌 걸그룹 랭킹</dl>
+                            <dl className="btn">투표</dl>
+                          </li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul className="hoverImgPt">
+                          <li className="thumb">
+                            <img
+                              src="https://cdn.hankyung.com/photo/202404/BF.36389450.1.jpg"
+                              alt="아이돌 보이그룹"
+                            />
+                          </li>
+                          <li className="info">
+                            <dl className="date">23.06.14 ~ 24.06.30</dl>
+                            <dl className="title">아이돌 보이그룹 랭킹</dl>
+                            <dl className="btn">투표</dl>
+                          </li>
+                        </ul>
+                      </SwiperSlide>
+                      <SwiperSlide>
+                        <ul className="hoverImgPt">
+                          <li className="thumb">
+                            <img
+                              src="https://file2.nocutnews.co.kr/newsroom/image/2022/01/31/202201312047237692_0.jpg"
+                              alt="트로트 가수"
+                            />
+                          </li>
+                          <li className="info">
+                            <dl className="date">23.06.14 ~ 24.06.30</dl>
+                            <dl className="title">트로트 가수 남성 랭킹</dl>
+                            <dl className="btn">투표</dl>
+                          </li>
+                        </ul>
+                      </SwiperSlide>
+                    </Swiper>
+                  </div>
+                </div>
               </div>
+
               <div className="stickyTitle">
                 <span>스포츠</span> 주요뉴스
               </div>
               <div className="popularNewsRight">
-                {recents.map((recent, index) => (
-                  <ul key={index}>
+                {recents.slice(0, 10).map((recent, index) => (
+                  <ul key={recent.newsId}>
                     <li>{index + 1}</li>
                     <li>{recent.title}</li>
                     <li>
