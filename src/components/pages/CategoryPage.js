@@ -65,24 +65,22 @@ function CategoryPage() {
             <div className="newsList">
               <div className="list">
                 {newsData.newsList.content.map((news) => (
-                  <ul className="hoverImgPt" key={news.newsId}>
-                    <div className="thumb">
-                      <img src={news.thumbnail} alt={news.title} />
-                    </div>
-                    <li className="tit">
-                      <Link to={`/category/${categoryId}/news/${news.newsId}`}>
-                        {news.title}
-                      </Link>
-                    </li>
-                    <li className="txt">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: stripImages(news.content),
-                        }}
-                      />
-                    </li>
-                    <li className="info">{news.pressName}</li>
-                  </ul>
+                  <Link to={`/category/${categoryId}/news/${news.newsId}`}>
+                    <ul className="hoverImgPt" key={news.newsId}>
+                      <div className="thumb">
+                        <img src={news.thumbnail} alt={news.title} />
+                      </div>
+                      <li className="tit">{news.title}</li>
+                      <li className="txt">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: stripImages(news.content),
+                          }}
+                        />
+                      </li>
+                      <li className="info">{news.pressName}</li>
+                    </ul>{" "}
+                  </Link>
                 ))}
               </div>
               <div className="paging"></div>
@@ -139,13 +137,15 @@ function CategoryPage() {
               <div className="stickyTitle">실시간 인기기사</div>
               <div className="popularNewsRight">
                 {newsData.resents.slice(0, 5).map((recent, index) => (
-                  <ul key={recent.newsId}>
-                    <li>{index + 1}</li>
-                    <li>{recent.title}</li>
-                    <li>
-                      <img src={recent.thumbnail} alt={recent.title} />
-                    </li>
-                  </ul>
+                  <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
+                    <ul key={recent.newsId}>
+                      <li>{index + 1}</li>
+                      <li>{recent.title}</li>
+                      <li>
+                        <img src={recent.thumbnail} alt={recent.title} />
+                      </li>
+                    </ul>
+                  </Link>
                 ))}
               </div>
 
@@ -153,10 +153,13 @@ function CategoryPage() {
               <div className="rtNewsRight">
                 {newsData.newsList.content.slice(0, 4).map((recent) => (
                   <ul key={recent.newsId}>
-                    <li>
-                      <img src={recent.thumbnail} alt={recent.title} />
-                    </li>
-                    <li>{recent.title}</li>
+                    {" "}
+                    <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
+                      <li>
+                        <img src={recent.thumbnail} alt={recent.title} />
+                      </li>
+                      <li>{recent.title}</li>
+                    </Link>
                   </ul>
                 ))}
               </div>
