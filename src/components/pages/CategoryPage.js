@@ -137,13 +137,15 @@ function CategoryPage() {
               <div className="stickyTitle">실시간 인기기사</div>
               <div className="popularNewsRight">
                 {newsData.resents.slice(0, 5).map((recent, index) => (
-                  <ul key={recent.newsId}>
-                    <li>{index + 1}</li>
-                    <li>{recent.title}</li>
-                    <li>
-                      <img src={recent.thumbnail} alt={recent.title} />
-                    </li>
-                  </ul>
+                  <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
+                    <ul key={recent.newsId}>
+                      <li>{index + 1}</li>
+                      <li>{recent.title}</li>
+                      <li>
+                        <img src={recent.thumbnail} alt={recent.title} />
+                      </li>
+                    </ul>
+                  </Link>
                 ))}
               </div>
 
@@ -151,10 +153,13 @@ function CategoryPage() {
               <div className="rtNewsRight">
                 {newsData.newsList.content.slice(0, 4).map((recent) => (
                   <ul key={recent.newsId}>
-                    <li>
-                      <img src={recent.thumbnail} alt={recent.title} />
-                    </li>
-                    <li>{recent.title}</li>
+                    {" "}
+                    <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
+                      <li>
+                        <img src={recent.thumbnail} alt={recent.title} />
+                      </li>
+                      <li>{recent.title}</li>
+                    </Link>
                   </ul>
                 ))}
               </div>
