@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -69,7 +69,11 @@ function CategoryPage() {
                     <div className="thumb">
                       <img src={news.thumbnail} alt={news.title} />
                     </div>
-                    <li className="tit">{news.title}</li>
+                    <li className="tit">
+                      <Link to={`/category/${categoryId}/news/${news.newsId}`}>
+                        {news.title}
+                      </Link>
+                    </li>
                     <li className="txt">
                       <div
                         dangerouslySetInnerHTML={{
