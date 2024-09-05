@@ -70,7 +70,7 @@ function Header({ categories }) {
                 <Link key={category.id} to={`/category/${category.id}`}>
                   <dt
                     className={
-                      location.pathname === `/category/${category.id}`
+                      location.pathname.startsWith(`/category/${category.id}`)
                         ? "on"
                         : ""
                     }
