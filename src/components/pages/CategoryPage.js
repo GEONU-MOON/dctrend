@@ -65,24 +65,22 @@ function CategoryPage() {
             <div className="newsList">
               <div className="list">
                 {newsData.newsList.content.map((news) => (
-                  <ul className="hoverImgPt" key={news.newsId}>
-                    <div className="thumb">
-                      <img src={news.thumbnail} alt={news.title} />
-                    </div>
-                    <li className="tit">
-                      <Link to={`/category/${categoryId}/news/${news.newsId}`}>
-                        {news.title}
-                      </Link>
-                    </li>
-                    <li className="txt">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: stripImages(news.content),
-                        }}
-                      />
-                    </li>
-                    <li className="info">{news.pressName}</li>
-                  </ul>
+                  <Link to={`/category/${categoryId}/news/${news.newsId}`}>
+                    <ul className="hoverImgPt" key={news.newsId}>
+                      <div className="thumb">
+                        <img src={news.thumbnail} alt={news.title} />
+                      </div>
+                      <li className="tit">{news.title}</li>
+                      <li className="txt">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: stripImages(news.content),
+                          }}
+                        />
+                      </li>
+                      <li className="info">{news.pressName}</li>
+                    </ul>{" "}
+                  </Link>
                 ))}
               </div>
               <div className="paging"></div>
