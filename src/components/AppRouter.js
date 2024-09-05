@@ -11,7 +11,7 @@ function AppRouter() {
       <Route
         path="/category/:categoryId/news/:newsId"
         element={<NewsDetailPage />}
-      />{" "}
+      />
     </Routes>
   );
 }

@@ -200,7 +200,7 @@ function NewsDetailPage() {
               </div>
 
               <div className="stickyTitle">
-                <span>스포츠</span> 주요뉴스
+                <span>{newsDetail.categoryName}</span> 주요뉴스
               </div>
               <div className="popularNewsRight">
                 {recents.slice(0, 10).map((recent, index) => (
