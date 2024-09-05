@@ -38,9 +38,7 @@ function Main() {
           </div>
           <div className="pc">
             <ul className="search">
-              <a>
-                <img src="../images/ico_search.svg" alt="" />
-              </a>
+              <img src="../images/ico_search.svg" alt="" />
             </ul>
             <ul className="btn">
               <img src="../images/ico_ticket.png" alt="" />

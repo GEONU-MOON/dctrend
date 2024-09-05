@@ -40,9 +40,8 @@ function Header({ categories }) {
               />
               <img className="clickSearch" src={icoSearch} alt="search icon" />
             </div>
-            <a>
-              <img className="openSearch" src={icoSearch} alt="open search" />
-            </a>
+
+            <img className="openSearch" src={icoSearch} alt="open search" />
           </ul>
           <ul className="btn">
             <img src={icoTicket} alt="ticket" />
@@ -57,12 +56,8 @@ function Header({ categories }) {
             <Link to="/">
               <dl className="on">트렌드 뉴스</dl>
             </Link>
-            <a>
-              <dl>디시이슈</dl>
-            </a>
-            <a>
-              <dl>디시인터뷰</dl>
-            </a>
+            <dl>디시이슈</dl>
+            <dl>디시인터뷰</dl>
           </li>
         </ul>
         <ul className="dep2">
