@@ -22,6 +22,9 @@ function CategoryPage() {
     resents: [],
     populars: [],
   });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 12;
 
   const [setCategories] = useState([]);
 
@@ -41,20 +44,31 @@ function CategoryPage() {
   useEffect(() => {
     axios
       .get(
-        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=12&page=1&recentNews=10&popularNews=10`
+        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=${pageSize}&page=${page}&recentNews=10&popularNews=10`
       )
       .then((response) => {
         if (response.data.message === "success") {
           setNewsData(response.data.data);
+          const totalCounts = response.data.data.newsList.metadata.totalCounts;
+          console.log("Total Counts:", totalCounts);
+          const calculatedTotalPages =
+            response.data.data.newsList.metadata.totalPages;
+          setTotalPages(calculatedTotalPages);
         }
       })
       .catch((error) => {
         console.error("Error fetching news data:", error);
       });
-  }, [categoryId]);
+  }, [categoryId, page, pageSize]);
 
   const stripImages = (htmlContent) => {
     return htmlContent.replace(/<img[^>]*>/g, "");
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
   };
 
   return (
@@ -65,8 +79,11 @@ function CategoryPage() {
             <div className="newsList">
               <div className="list">
                 {newsData.newsList.content.map((news) => (
-                  <Link to={`/category/${categoryId}/news/${news.newsId}`}>
-                    <ul className="hoverImgPt" key={news.newsId}>
+                  <Link
+                    to={`/category/${categoryId}/news/${news.newsId}`}
+                    key={news.newsId}
+                  >
+                    <ul className="hoverImgPt">
                       <div className="thumb">
                         <img src={news.thumbnail} alt={news.title} />
                       </div>
@@ -79,11 +96,28 @@ function CategoryPage() {
                         />
                       </li>
                       <li className="info">{news.pressName}</li>
-                    </ul>{" "}
+                    </ul>
                   </Link>
                 ))}
               </div>
-              <div className="paging"></div>
+
+              <div className="paging">
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                >
+                  이전
+                </button>
+                <span>
+                  {page} / {totalPages}
+                </span>{" "}
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page === totalPages}
+                >
+                  다음
+                </button>
+              </div>
             </div>
           </div>
 
@@ -137,8 +171,11 @@ function CategoryPage() {
               <div className="stickyTitle">실시간 인기기사</div>
               <div className="popularNewsRight">
                 {newsData.resents.slice(0, 5).map((recent, index) => (
-                  <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
-                    <ul key={recent.newsId}>
+                  <Link
+                    to={`/category/${categoryId}/news/${recent.newsId}`}
+                    key={recent.newsId}
+                  >
+                    <ul>
                       <li>{index + 1}</li>
                       <li>{recent.title}</li>
                       <li>
@@ -153,7 +190,6 @@ function CategoryPage() {
               <div className="rtNewsRight">
                 {newsData.newsList.content.slice(0, 4).map((recent) => (
                   <ul key={recent.newsId}>
-                    {" "}
                     <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
                       <li>
                         <img src={recent.thumbnail} alt={recent.title} />
