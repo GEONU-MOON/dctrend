@@ -107,7 +107,7 @@ function CategoryPage() {
                   disabled={page === 1}
                 >
                   이전
-                </button>
+                </button>{" "}
                 <span>
                   {page} / {totalPages}
                 </span>{" "}
