@@ -24,6 +24,7 @@ function CategoryPage() {
   });
 
   const [setCategories] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     axios
@@ -36,12 +37,12 @@ function CategoryPage() {
       .catch((error) => {
         console.error("Error fetching categories:", error);
       });
-  });
+  }, []);
 
   useEffect(() => {
     axios
       .get(
-        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=12&page=1&recentNews=10&popularNews=10`
+        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=12&page=${page}&recentNews=10&popularNews=10`
       )
       .then((response) => {
         if (response.data.message === "success") {
@@ -51,10 +52,16 @@ function CategoryPage() {
       .catch((error) => {
         console.error("Error fetching news data:", error);
       });
-  }, [categoryId]);
+  }, [categoryId, page]);
 
   const stripImages = (htmlContent) => {
     return htmlContent.replace(/<img[^>]*>/g, "");
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0) {
+      setPage(newPage);
+    }
   };
 
   return (
@@ -65,8 +72,11 @@ function CategoryPage() {
             <div className="newsList">
               <div className="list">
                 {newsData.newsList.content.map((news) => (
-                  <Link to={`/category/${categoryId}/news/${news.newsId}`}>
-                    <ul className="hoverImgPt" key={news.newsId}>
+                  <Link
+                    to={`/category/${categoryId}/news/${news.newsId}`}
+                    key={news.newsId}
+                  >
+                    <ul className="hoverImgPt">
                       <div className="thumb">
                         <img src={news.thumbnail} alt={news.title} />
                       </div>
@@ -79,11 +89,20 @@ function CategoryPage() {
                         />
                       </li>
                       <li className="info">{news.pressName}</li>
-                    </ul>{" "}
+                    </ul>
                   </Link>
                 ))}
               </div>
-              <div className="paging"></div>
+              <div className="paging">
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                >
+                  이전
+                </button>
+                <span>{page}</span>
+                <button onClick={() => handlePageChange(page + 1)}>다음</button>
+              </div>
             </div>
           </div>
 
@@ -137,8 +156,11 @@ function CategoryPage() {
               <div className="stickyTitle">실시간 인기기사</div>
               <div className="popularNewsRight">
                 {newsData.resents.slice(0, 5).map((recent, index) => (
-                  <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
-                    <ul key={recent.newsId}>
+                  <Link
+                    to={`/category/${categoryId}/news/${recent.newsId}`}
+                    key={recent.newsId}
+                  >
+                    <ul>
                       <li>{index + 1}</li>
                       <li>{recent.title}</li>
                       <li>
@@ -153,7 +175,6 @@ function CategoryPage() {
               <div className="rtNewsRight">
                 {newsData.newsList.content.slice(0, 4).map((recent) => (
                   <ul key={recent.newsId}>
-                    {" "}
                     <Link to={`/category/${categoryId}/news/${recent.newsId}`}>
                       <li>
                         <img src={recent.thumbnail} alt={recent.title} />
