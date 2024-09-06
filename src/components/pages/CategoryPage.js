@@ -22,9 +22,11 @@ function CategoryPage() {
     resents: [],
     populars: [],
   });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 12;
 
   const [setCategories] = useState([]);
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
     axios
@@ -37,29 +39,34 @@ function CategoryPage() {
       .catch((error) => {
         console.error("Error fetching categories:", error);
       });
-  }, []);
+  });
 
   useEffect(() => {
     axios
       .get(
-        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=12&page=${page}&recentNews=10&popularNews=10`
+        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=${pageSize}&page=${page}&recentNews=10&popularNews=10`
       )
       .then((response) => {
         if (response.data.message === "success") {
           setNewsData(response.data.data);
+          const totalCounts = response.data.data.newsList.metadata.totalCounts;
+          console.log("Total Counts:", totalCounts);
+          const calculatedTotalPages =
+            response.data.data.newsList.metadata.totalPages;
+          setTotalPages(calculatedTotalPages);
         }
       })
       .catch((error) => {
         console.error("Error fetching news data:", error);
       });
-  }, [categoryId, page]);
+  }, [categoryId, page, pageSize]);
 
   const stripImages = (htmlContent) => {
     return htmlContent.replace(/<img[^>]*>/g, "");
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage > 0) {
+    if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
     }
   };
@@ -93,6 +100,7 @@ function CategoryPage() {
                   </Link>
                 ))}
               </div>
+
               <div className="paging">
                 <button
                   onClick={() => handlePageChange(page - 1)}
@@ -100,8 +108,15 @@ function CategoryPage() {
                 >
                   이전
                 </button>
-                <span>{page}</span>
-                <button onClick={() => handlePageChange(page + 1)}>다음</button>
+                <span>
+                  {page} / {totalPages}
+                </span>{" "}
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page === totalPages}
+                >
+                  다음
+                </button>
               </div>
             </div>
           </div>
