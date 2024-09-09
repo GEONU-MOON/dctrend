@@ -39,7 +39,7 @@ function CategoryPage() {
       .catch((error) => {
         console.error("Error fetching categories:", error);
       });
-  });
+  }, []);
 
   useEffect(() => {
     axios
@@ -71,6 +71,29 @@ function CategoryPage() {
       "gi"
     );
     return htmlContent.replace(tagPattern, "");
+  };
+
+  const parseTableData = (htmlContent) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, "text/html");
+    const table = doc.querySelector("table");
+
+    if (!table) return htmlContent;
+
+    let formattedData = "";
+
+    const rows = table.querySelectorAll("tr");
+    rows.forEach((row, rowIndex) => {
+      const cells = row.querySelectorAll("td");
+      if (cells.length === 6 && rowIndex > 0) {
+        formattedData += `
+          주요도시: ${cells[0].innerText.trim()} - 기온: ${cells[1].innerText.trim()} - 날씨: ${cells[2].innerText.trim()}<br/>
+          주요도시: ${cells[3].innerText.trim()} - 기온: ${cells[4].innerText.trim()} - 날씨: ${cells[5].innerText.trim()}<br/><br/>
+        `;
+      }
+    });
+
+    return formattedData;
   };
 
   const handlePageChange = (newPage) => {
@@ -107,11 +130,9 @@ function CategoryPage() {
                                 contentWithoutImages,
                                 "h2"
                               );
-                              console.log(
-                                "Content without h2:",
-                                contentWithoutH2
-                              );
-                              return contentWithoutH2;
+                              const formattedTableData =
+                                parseTableData(contentWithoutH2);
+                              return formattedTableData;
                             })(),
                           }}
                         />
