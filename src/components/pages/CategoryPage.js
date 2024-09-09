@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination as AntPagination } from "antd";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "antd/dist/reset.css";
 import "../../css/common.css";
 import "../../css/layout.css";
 import logo from "../../images/logo.svg";
@@ -101,21 +103,15 @@ function CategoryPage() {
               </div>
 
               <div className="paging">
-                <button
-                  onClick={() => handlePageChange(page - 1)}
-                  disabled={page === 1}
-                >
-                  이전
-                </button>{" "}
-                <span>
-                  {page} / {totalPages}
-                </span>{" "}
-                <button
-                  onClick={() => handlePageChange(page + 1)}
-                  disabled={page === totalPages}
-                >
-                  다음
-                </button>
+                <AntPagination
+                  current={page}
+                  pageSize={pageSize}
+                  total={totalPages * pageSize}
+                  onChange={handlePageChange}
+                  showSizeChanger={false}
+                  hideOnSinglePage={true}
+                  showQuickJumper={false}
+                />
               </div>
             </div>
           </div>
