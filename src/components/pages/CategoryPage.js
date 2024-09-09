@@ -166,18 +166,23 @@ function CategoryPage() {
               <div className="stickyTitle">실시간 인기기사</div>
               <div className="popularNewsRight">
                 {newsData.resents.slice(0, 5).map((recent, index) => (
-                  <Link
-                    to={`/category/${categoryId}/news/${recent.newsId}`}
-                    key={recent.newsId}
-                  >
-                    <ul>
-                      <li>{index + 1}</li>
-                      <li>{recent.title}</li>
-                      <li>
+                  <ul key={recent.newsId}>
+                    <li>{index + 1}</li>
+                    <li>
+                      <Link
+                        to={`/category/${categoryId}/news/${recent.newsId}`}
+                      >
+                        {recent.title}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={`/category/${categoryId}/news/${recent.newsId}`}
+                      >
                         <img src={recent.thumbnail} alt={recent.title} />
-                      </li>
-                    </ul>
-                  </Link>
+                      </Link>
+                    </li>
+                  </ul>
                 ))}
               </div>
 
