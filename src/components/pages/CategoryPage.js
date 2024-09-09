@@ -65,6 +65,14 @@ function CategoryPage() {
     return htmlContent.replace(/<img[^>]*>/g, "");
   };
 
+  const stripTags = (htmlContent, tagToRemove) => {
+    const tagPattern = new RegExp(
+      `<${tagToRemove}[^>]*>(.*?)<\/${tagToRemove}>`,
+      "gi"
+    );
+    return htmlContent.replace(tagPattern, "");
+  };
+
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
@@ -91,7 +99,20 @@ function CategoryPage() {
                       <li className="txt">
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: stripImages(news.content),
+                            __html: (() => {
+                              const contentWithoutImages = stripImages(
+                                news.content
+                              );
+                              const contentWithoutH2 = stripTags(
+                                contentWithoutImages,
+                                "h2"
+                              );
+                              console.log(
+                                "Content without h2:",
+                                contentWithoutH2
+                              );
+                              return contentWithoutH2;
+                            })(),
                           }}
                         />
                       </li>
