@@ -50,7 +50,6 @@ function CategoryPage() {
         if (response.data.message === "success") {
           setNewsData(response.data.data);
           const totalCounts = response.data.data.newsList.metadata.totalCounts;
-          console.log("Total Counts:", totalCounts);
           const calculatedTotalPages =
             response.data.data.newsList.metadata.totalPages;
           setTotalPages(calculatedTotalPages);
@@ -61,8 +60,14 @@ function CategoryPage() {
       });
   }, [categoryId, page, pageSize]);
 
-  const stripImages = (htmlContent) => {
-    return htmlContent.replace(/<img[^>]*>/g, "");
+  const stripImagesAndFigcaptionAndFigure = (htmlContent) => {
+    let contentWithoutImages = htmlContent.replace(/<img[^>]*>/g, "");
+    let contentWithoutFigcaption = contentWithoutImages.replace(
+      /<figcaption[^>]*>(.*?)<\/figcaption>/gi,
+      ""
+    );
+
+    return contentWithoutFigcaption.replace(/<figure[^>]*>\s*<\/figure>/gi, "");
   };
 
   const stripTags = (htmlContent, tagToRemove) => {
@@ -123,11 +128,10 @@ function CategoryPage() {
                         <div
                           dangerouslySetInnerHTML={{
                             __html: (() => {
-                              const contentWithoutImages = stripImages(
-                                news.content
-                              );
+                              const contentWithoutImagesAndFigcaptionAndFigure =
+                                stripImagesAndFigcaptionAndFigure(news.content);
                               const contentWithoutH2 = stripTags(
-                                contentWithoutImages,
+                                contentWithoutImagesAndFigcaptionAndFigure,
                                 "h2"
                               );
                               const formattedTableData =
