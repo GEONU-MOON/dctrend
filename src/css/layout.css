@@ -592,6 +592,12 @@ input[type="number"]::-webkit-inner-spin-button {
   display: none;
 }
 
+.paging {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .slideMenu {
   position: fixed;
   top: 0;
