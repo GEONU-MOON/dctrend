@@ -69,6 +69,7 @@ function CategoryPage() {
       .catch((error) => {
         console.error("Error fetching news data:", error);
       });
+    window.scrollTo({ top: 0 });
   }, [categoryId, page, pageSize]);
 
   const handlePageChange = (newPage) => {
