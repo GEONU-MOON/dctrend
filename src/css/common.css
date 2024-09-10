@@ -838,7 +838,7 @@ div:where(.swal2-container) {
   white-space: pre-line;
 }
 
-.footer {
+#footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
