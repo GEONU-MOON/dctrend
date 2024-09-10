@@ -35,6 +35,10 @@ function CategoryPage() {
   const { cleanHTMLContent } = useCleanHTML();
 
   useEffect(() => {
+    setPage(1); // 카테고리 변경 시 페이지 초기화
+  }, [categoryId]);
+
+  useEffect(() => {
     axios
       .get("https://api.trend.rankify.best/api/v1/news/categories")
       .then((response) => {
