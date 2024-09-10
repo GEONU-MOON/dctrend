@@ -47,6 +47,7 @@ const useCleanHTML = () => {
   const cleanHTMLContent = useCallback(
     (htmlContent) => {
       let cleanedContent = stripImagesAndFigcaptionAndFigure(htmlContent);
+      cleanedContent = stripTags(cleanedContent, "iframe");
       cleanedContent = stripTags(cleanedContent, "h2");
       cleanedContent = parseTableData(cleanedContent);
       return cleanedContent;

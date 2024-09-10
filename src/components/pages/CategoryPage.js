@@ -58,6 +58,7 @@ function CategoryPage() {
       )
       .then((response) => {
         if (response.data.message === "success") {
+          console.log("News Data: ", response.data.data);
           setNewsData(response.data.data);
           const totalCounts = response.data.data.newsList.metadata.totalCounts;
           const calculatedTotalPages =
