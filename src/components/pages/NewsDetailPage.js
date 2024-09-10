@@ -106,7 +106,36 @@ function NewsDetailPage() {
             </div>
             <div className="keywordRank">
               <div className="keyword">
-                <div className="items"></div>
+                <div className="items">
+                  <div className="swiper keywordItems">
+                    <div className="swiper-wrapper">
+                      <div className="swiper-slide">
+                        <ul>치어리더</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul className="on">여자아이돌</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul>남자트로트가수</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul>국내애니메이션</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul>K-POP</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul>여자BJ</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul>리그오브레전드챔피언</ul>
+                      </div>
+                      <div className="swiper-slide">
+                        <ul>여자아나운서</ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="result">
