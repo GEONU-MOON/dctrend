@@ -349,21 +349,30 @@ function NewsDetailPage() {
 
             <div className="commentWrap">
               <div className="totalCnt">댓글 0</div>
+              <div className="loginFalse">
+                <input
+                  className="inputField"
+                  name="nick"
+                  type="text"
+                  placeholder="닉네임"
+                />
+                <input
+                  className="inputField"
+                  name="password"
+                  type="password"
+                  placeholder="비밀번호"
+                />
+              </div>
               <div className="writeBox">
-                <div className="loginFalse">
-                  <input name="nick" type="text" placeholder="닉네임" />
-                  <input
-                    name="password"
-                    type="password"
-                    placeholder="비밀번호"
-                  />
-                </div>
                 <div className="textareaBox">
-                  <textarea></textarea>
-                  <ul>
-                    <li>0/500</li>
-                    <li className="btn">등록</li>
-                  </ul>
+                  <textarea
+                    className="commentText"
+                    placeholder="타인의 권리를 침해하거나 비하하는 댓글은 허용되지 않으며, 위반 시 삭제 및 제재될 수 있습니다. 건전한 토론 문화를 위해 협조 부탁드립니다."
+                  ></textarea>{" "}
+                  <div className="charCountSubmitWrap">
+                    <span className="charCount">0/500</span>
+                    <button className="submitBtn">등록</button>
+                  </div>
                 </div>
               </div>
             </div>

@@ -781,7 +781,6 @@ div:where(.swal2-container) {
   padding-bottom: 60px;
 }
 
-/*text-align*/
 .tgnl {
   text-align: left;
 }
@@ -790,4 +789,78 @@ div:where(.swal2-container) {
 }
 .tgnr {
   text-align: right;
+}
+
+.commentWrap {
+  margin-top: 20px;
+  border: 0;
+  font-size: 16px;
+  line-height: 30px;
+  margin-bottom: 8px;
+  outline: none;
+  resize: none;
+  width: 100%;
+}
+
+.writeBox {
+  border: 1px solid #e1e1e1;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.loginFalse {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.inputField {
+  width: calc(50% - 5px);
+  padding: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.textareaBox {
+  position: relative;
+}
+
+.commentText {
+  margin-top: 20px;
+  border: 0;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 8px;
+  outline: none;
+  resize: none;
+  width: 75%;
+  white-space: pre-line;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.charCountSubmitWrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.charCount {
+  font-size: 14px;
+  color: #999;
+}
+
+.submitBtn {
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
