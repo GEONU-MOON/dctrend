@@ -12,6 +12,7 @@ function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
   const [newsDetail, setNewsDetail] = useState(null);
   const [emotions, setEmotions] = useState([]);
+  const [clickedEmotions, setClickedEmotions] = useState([]);
   const [recents, setRecents] = useState([]);
   const [comment, setComment] = useState("");
   const [charCount, setCharCount] = useState(0);
@@ -41,6 +42,26 @@ function NewsDetailPage() {
     const text = e.target.value;
     setComment(text);
     setCharCount(text.length);
+  };
+
+  const handleEmotionClick = (emotionType) => {
+    setEmotions((prevEmotions) =>
+      prevEmotions.map((emotion) => {
+        if (emotion.emotionType === emotionType) {
+          const isClicked = clickedEmotions[emotionType];
+          return {
+            ...emotion,
+            count: isClicked ? emotion.count - 1 : emotion.count + 1,
+          };
+        }
+        return emotion;
+      })
+    );
+
+    setClickedEmotions((prevClicked) => ({
+      ...prevClicked,
+      [emotionType]: !prevClicked[emotionType],
+    }));
   };
 
   return (
@@ -345,7 +366,10 @@ function NewsDetailPage() {
             </div>
             <div className="newsVote">
               {emotions.map((emotion) => (
-                <ul key={emotion.emotionType}>
+                <ul
+                  key={emotion.emotionType}
+                  onClick={() => handleEmotionClick(emotion.emotionType)}
+                >
                   <li>
                     <img src={emotion.iconUrl} alt={emotion.name} />
                   </li>
@@ -354,7 +378,6 @@ function NewsDetailPage() {
                 </ul>
               ))}
             </div>
-
             <div className="commentWrap">
               <div className="totalCnt">댓글 0</div>
               <div className="loginFalse">
@@ -375,17 +398,14 @@ function NewsDetailPage() {
                 <div className="textareaBox">
                   <textarea
                     className="commentText"
-                    value={comment} // 댓글 내용 바인딩
-                    onChange={handleCommentChange} // onChange 핸들러 추가
-                    maxLength={500} // 글자 제한 500자
+                    value={comment}
+                    onChange={handleCommentChange}
+                    maxLength={500}
                     placeholder="타인의 권리를 침해하거나 비하하는 댓글은 허용되지 않으며, 위반 시 삭제 및 제재될 수 있습니다. 건전한 토론 문화를 위해 협조 부탁드립니다."
                   ></textarea>
                   <div className="charCountSubmitWrap">
                     <span className="charCount">{charCount}/500</span>
-                    <button
-                      className="submitBtn"
-                      disabled={charCount === 0} // 글자 수가 0이면 비활성화
-                    >
+                    <button className="submitBtn" disabled={charCount === 0}>
                       등록
                     </button>
                   </div>
