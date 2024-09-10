@@ -858,9 +858,20 @@ div:where(.swal2-container) {
 }
 
 .submitBtn {
+  background-color: gray;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 10%;
+  padding: 4px 10px;
+  cursor: not-allowed;
+}
+
+.submitBtn:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+.submitBtn:not(:disabled) {
+  background-color: blue;
   cursor: pointer;
 }

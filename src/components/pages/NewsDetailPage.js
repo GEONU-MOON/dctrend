@@ -13,6 +13,8 @@ function NewsDetailPage() {
   const [newsDetail, setNewsDetail] = useState(null);
   const [emotions, setEmotions] = useState([]);
   const [recents, setRecents] = useState([]);
+  const [comment, setComment] = useState("");
+  const [charCount, setCharCount] = useState(0);
 
   useEffect(() => {
     axios
@@ -34,6 +36,12 @@ function NewsDetailPage() {
   if (!newsDetail) {
     return <div>Loading...</div>;
   }
+
+  const handleCommentChange = (e) => {
+    const text = e.target.value;
+    setComment(text);
+    setCharCount(text.length);
+  };
 
   return (
     <div>
@@ -367,11 +375,19 @@ function NewsDetailPage() {
                 <div className="textareaBox">
                   <textarea
                     className="commentText"
+                    value={comment} // 댓글 내용 바인딩
+                    onChange={handleCommentChange} // onChange 핸들러 추가
+                    maxLength={500} // 글자 제한 500자
                     placeholder="타인의 권리를 침해하거나 비하하는 댓글은 허용되지 않으며, 위반 시 삭제 및 제재될 수 있습니다. 건전한 토론 문화를 위해 협조 부탁드립니다."
-                  ></textarea>{" "}
+                  ></textarea>
                   <div className="charCountSubmitWrap">
-                    <span className="charCount">0/500</span>
-                    <button className="submitBtn">등록</button>
+                    <span className="charCount">{charCount}/500</span>
+                    <button
+                      className="submitBtn"
+                      disabled={charCount === 0} // 글자 수가 0이면 비활성화
+                    >
+                      등록
+                    </button>
                   </div>
                 </div>
               </div>
