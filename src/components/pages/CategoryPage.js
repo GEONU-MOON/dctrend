@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useSearchParams, useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination as AntPagination } from "antd";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -25,18 +25,22 @@ function CategoryPage() {
     resents: [],
     populars: [],
   });
-  const [page, setPage] = useState(1);
+
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 12;
 
   const [categories, setCategories] = useState([]);
 
-  // HTML 클린업 훅 사용
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1", 10);
+
   const { cleanHTMLContent } = useCleanHTML();
 
   useEffect(() => {
-    setPage(1); // 카테고리 변경 시 페이지 초기화
-  }, [categoryId]);
+    if (!searchParams.get("page")) {
+      setSearchParams({ page: 1 });
+    }
+  }, [categoryId, searchParams, setSearchParams]);
 
   useEffect(() => {
     axios
@@ -58,7 +62,6 @@ function CategoryPage() {
       )
       .then((response) => {
         if (response.data.message === "success") {
-          // console.log("News Data: ", response.data.data);
           setNewsData(response.data.data);
           const calculatedTotalPages =
             response.data.data.newsList.metadata.totalPages;
@@ -72,7 +75,7 @@ function CategoryPage() {
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
-      setPage(newPage);
+      setSearchParams({ page: newPage });
       window.scrollTo({ top: 0 });
     }
   };
