@@ -10811,8 +10811,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .commentWrap .totalCnt span {
   color: var(--gray120);
 }
-.commentWrap .writeBox {
-}
+
 .commentWrap .writeBox .loginFalse {
   display: flex;
 }
