@@ -7,6 +7,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "../../css/common.css";
 import "../../css/layout.css";
+import share from "../../images/btn_share.svg";
+import fontsize from "../../images/btn_fontsize.svg";
 
 function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
@@ -108,8 +110,8 @@ function NewsDetailPage() {
                   입력 {new Date(newsDetail.publishedAt).toLocaleString()}
                 </ul>
                 <ul className="btn">
-                  <img src="../images/btn_share.svg" alt="" />
-                  <img src="../images/btn_fontsize.svg" alt="" />
+                  <img src={share} alt="" />
+                  <img src={fontsize} alt="" />
                 </ul>
               </div>
               <div className="contents">
