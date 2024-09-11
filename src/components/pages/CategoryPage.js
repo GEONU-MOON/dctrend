@@ -64,17 +64,32 @@ function CategoryPage() {
           const calculatedTotalPages =
             response.data.data.newsList.metadata.totalPages;
           setTotalPages(calculatedTotalPages);
+
+          // 스크롤 복원: 세션 스토리지에서 스크롤 위치 가져오기
+          const savedScrollPosition = sessionStorage.getItem(
+            `scrollPosition_${categoryId}`
+          );
+
+          // 스크롤 위치가 있으면 복원, 없으면 최상단으로 이동
+          if (savedScrollPosition) {
+            window.scrollTo({
+              top: parseInt(savedScrollPosition, 10),
+              behavior: "smooth",
+            });
+          } else {
+            window.scrollTo({ top: 0 });
+          }
         }
       })
       .catch((error) => {
         console.error("Error fetching news data:", error);
       });
-    window.scrollTo({ top: 0 });
   }, [categoryId, page, pageSize]);
 
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
+      sessionStorage.removeItem(`scrollPosition_${categoryId}`);
     }
   };
 
@@ -90,6 +105,13 @@ function CategoryPage() {
                     <Link
                       to={`/category/${categoryId}/news/${news.newsId}`}
                       key={news.newsId}
+                      onClick={() => {
+                        // 현재 스크롤 위치를 세션 스토리지에 저장
+                        sessionStorage.setItem(
+                          `scrollPosition_${categoryId}`,
+                          window.scrollY
+                        );
+                      }}
                     >
                       <ul className="hoverImgPt">
                         <div className="thumb">
