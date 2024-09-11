@@ -41,37 +41,7 @@ function SlideMenu({ isOpen, toggleMenu }) {
           <ul className="on">뉴스</ul> {/* 기본 활성 탭 */}
           <ul>랭킹</ul>
         </div>
-        <div className="menu news">
-          <ul>
-            <li>트렌드 뉴스</li>
-            <li>
-              <dl>전체</dl>
-              <dl>랭킹뉴스</dl>
-              <dl>연예·스포츠</dl>
-            </li>
-          </ul>
-          <ul>
-            <li>트렌드 뉴스</li>
-            <li>
-              <dl>전체</dl>
-              <dl>시사</dl>
-              <dl>경제</dl>
-              <dl>사회</dl>
-              <dl>문화</dl>
-              <dl>IT</dl>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              트렌드 뉴스<div className="arw"></div>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              디시인터뷰<div className="arw"></div>
-            </li>
-          </ul>
-        </div>
+
         <div className="menu rank">
           <ul>
             <li>
