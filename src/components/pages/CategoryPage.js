@@ -36,12 +36,14 @@ function CategoryPage() {
 
   const { cleanHTMLContent } = useCleanHTML();
 
+  // 카테고리 ID 또는 검색 매개변수가 변경될 때마다 페이지 번호가 없으면 기본적으로 페이지를 1로 설정합니다.
   useEffect(() => {
     if (!searchParams.get("page")) {
       setSearchParams({ page: 1 });
     }
   }, [categoryId, searchParams, setSearchParams]);
 
+  // 컴포넌트가 마운트될 때 카테고리 목록을 API를 통해 가져오고 성공 시 상태에 저장합니다.
   useEffect(() => {
     axios
       .get("https://api.trend.rankify.best/api/v1/news/categories")
@@ -55,6 +57,7 @@ function CategoryPage() {
       });
   }, []);
 
+  // 카테고리 ID, 페이지 또는 페이지 크기가 변경될 때마다 뉴스 데이터를 API에서 가져와 상태를 업데이트합니다.
   useEffect(() => {
     axios
       .get(
@@ -73,6 +76,7 @@ function CategoryPage() {
       });
   }, [categoryId, page, pageSize]);
 
+  // 페이지 변경을 처리하는 함수입니다. 새로운 페이지가 유효한 경우 검색 매개변수를 업데이트하고 페이지 상단으로 스크롤합니다.
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setSearchParams({ page: newPage });
