@@ -4,6 +4,8 @@ import icoSearchGray from "../../images/ico_search_gray.svg"; // 퍼블리싱 �
 import icoTicket from "../../images/ico_ticket.png";
 import close from "../../images/btn_close.svg";
 import logout from "../../images/ico_logout.svg";
+import "../../css/common.css";
+import "../../css/layout.css";
 
 function SlideMenu({ isOpen, toggleMenu }) {
   return (
