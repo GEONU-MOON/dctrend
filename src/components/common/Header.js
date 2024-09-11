@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../images/logo.svg";
 import icoSearch from "../../images/ico_search.svg";
 import icoTicket from "../../images/ico_ticket.png";
+import menu from "../../images/btn_menu.svg";
 
 function Header({ categories }) {
   const location = useLocation();
@@ -40,7 +41,6 @@ function Header({ categories }) {
               />
               <img className="clickSearch" src={icoSearch} alt="search icon" />
             </div>
-
             <img className="openSearch" src={icoSearch} alt="open search" />
           </ul>
           <ul className="btn">
@@ -48,6 +48,9 @@ function Header({ categories }) {
             투표권 구매
           </ul>
           <ul className="login">로그인</ul>
+        </div>
+        <div className="mo slideMenuOpen">
+          <img src={menu} alt="menu button" />
         </div>
       </div>
       <div className="menuBox">
