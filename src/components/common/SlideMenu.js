@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../../images/logo.svg";
-import icoSearch from "../../images/ico_search.svg";
+import icoSearchGray from "../../images/ico_search_gray.svg"; // 퍼블리싱 파일의 아이콘 반영
 import icoTicket from "../../images/ico_ticket.png";
 import close from "../../images/btn_close.svg";
 import logout from "../../images/ico_logout.svg";
@@ -18,7 +18,7 @@ function SlideMenu({ isOpen, toggleMenu }) {
       </div>
       <div className="info">
         <div className="login">
-          <div className="name">홍길동</div>
+          <div className="name">홍길동</div> {/* 로그인 상태일 경우 */}
         </div>
         <div className="vote">
           <div className="myVote">
@@ -32,11 +32,11 @@ function SlideMenu({ isOpen, toggleMenu }) {
       </div>
       <div className="scroll">
         <div className="search">
-          <img src={icoSearch} alt="search icon" />
+          <img src={icoSearchGray} alt="search icon" />
           <input name="search" type="text" placeholder="검색어를 입력하세요" />
         </div>
         <div className="tab">
-          <ul className="on">뉴스</ul>
+          <ul className="on">뉴스</ul> {/* 기본 활성 탭 */}
           <ul>랭킹</ul>
         </div>
         <div className="menu news">
@@ -46,6 +46,27 @@ function SlideMenu({ isOpen, toggleMenu }) {
               <dl>전체</dl>
               <dl>랭킹뉴스</dl>
               <dl>연예·스포츠</dl>
+            </li>
+          </ul>
+          <ul>
+            <li>트렌드 뉴스</li>
+            <li>
+              <dl>전체</dl>
+              <dl>시사</dl>
+              <dl>경제</dl>
+              <dl>사회</dl>
+              <dl>문화</dl>
+              <dl>IT</dl>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              트렌드 뉴스<div className="arw"></div>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              디시인터뷰<div className="arw"></div>
             </li>
           </ul>
         </div>
@@ -63,6 +84,15 @@ function SlideMenu({ isOpen, toggleMenu }) {
           <ul>
             <li>
               유튜버<div className="arw"></div>
+            </li>
+          </ul>
+          <ul>
+            <li>투표 모아보기</li>
+            <li>
+              <dl>전체</dl>
+              <dl>연예인</dl>
+              <dl>유튜버</dl>
+              <dl>스포츠인</dl>
             </li>
           </ul>
         </div>
