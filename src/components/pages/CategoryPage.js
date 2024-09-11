@@ -29,7 +29,7 @@ function CategoryPage() {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 12;
 
-  const [setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   // HTML 클린업 훅 사용
   const { cleanHTMLContent } = useCleanHTML();
@@ -58,7 +58,7 @@ function CategoryPage() {
       )
       .then((response) => {
         if (response.data.message === "success") {
-          console.log("News Data: ", response.data.data);
+          // console.log("News Data: ", response.data.data);
           setNewsData(response.data.data);
           const calculatedTotalPages =
             response.data.data.newsList.metadata.totalPages;

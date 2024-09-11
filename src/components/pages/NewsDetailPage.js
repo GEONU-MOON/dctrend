@@ -130,7 +130,7 @@ function NewsDetailPage() {
             <div className="sectionTitleSub">
               <div className="title">실시간 랭킹 차트</div>
               <div className="more">
-                랭킹 더보기<div class="arw s16"></div>
+                랭킹 더보기<div className="arw s16"></div>
               </div>
             </div>
             <div className="keywordRank">
