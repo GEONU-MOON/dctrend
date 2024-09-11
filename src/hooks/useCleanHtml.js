@@ -1,26 +1,13 @@
 import { useCallback } from "react";
 
 const useCleanHTML = () => {
-  const stripImagesAndFigcaptionAndFigure = useCallback((htmlContent) => {
-    let contentWithoutImages = htmlContent.replace(/<img[^>]*>/g, "");
-    let contentWithoutFigcaption = contentWithoutImages.replace(
-      /<figcaption[^>]*>(.*?)<\/figcaption>/gi,
-      ""
-    );
-    return contentWithoutFigcaption.replace(
-      /<figure[^>]*>[\s\S]*?<\/figure>/gi,
-      ""
-    );
+  // 모든 태그를 제거하는 함수
+  const stripAllTags = useCallback((htmlContent) => {
+    const tagPattern = /<[^>]*>/g; // 모든 HTML 태그를 찾는 정규식
+    return htmlContent.replace(tagPattern, ""); // 태그를 공백으로 교체
   }, []);
 
-  const stripTags = useCallback((htmlContent, tagToRemove) => {
-    const tagPattern = new RegExp(
-      `<${tagToRemove}[^>]*>(.*?)<\/${tagToRemove}>`,
-      "gi"
-    );
-    return htmlContent.replace(tagPattern, "");
-  }, []);
-
+  // 테이블 데이터를 파싱하는 함수 (기존 기능 유지)
   const parseTableData = useCallback((htmlContent) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
@@ -44,15 +31,14 @@ const useCleanHTML = () => {
     return formattedData;
   }, []);
 
+  // 메인 HTML 정리 함수
   const cleanHTMLContent = useCallback(
     (htmlContent) => {
-      let cleanedContent = stripImagesAndFigcaptionAndFigure(htmlContent);
-      cleanedContent = stripTags(cleanedContent, "iframe");
-      cleanedContent = stripTags(cleanedContent, "h2");
+      let cleanedContent = stripAllTags(htmlContent); // 모든 태그 제거
       cleanedContent = parseTableData(cleanedContent);
       return cleanedContent;
     },
-    [stripImagesAndFigcaptionAndFigure, stripTags, parseTableData]
+    [stripAllTags, parseTableData]
   );
 
   return { cleanHTMLContent };

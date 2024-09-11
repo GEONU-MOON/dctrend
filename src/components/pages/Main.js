@@ -9,7 +9,7 @@ import "swiper/css/scrollbar";
 import { Navigation } from "swiper/modules";
 
 function Main() {
-  const [setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios

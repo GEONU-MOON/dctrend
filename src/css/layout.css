@@ -614,7 +614,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .slideMenu .top {
   display: flex;
   align-items: center;
-  width: calc(100% - 40px);
+  width: calc(100%);
   padding: 0 20px 0 20px;
   height: 56px;
 }
@@ -626,7 +626,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .slideMenu .info {
   display: flex;
-  width: calc(100% - 40px);
+  width: calc(100%);
   padding: 0 20px 0 20px;
   height: 36px;
   align-items: center;
@@ -684,7 +684,7 @@ input[type="number"]::-webkit-inner-spin-button {
   top: 116px;
   left: 0;
   height: calc(100% - 196px);
-  width: calc(100% - 40px);
+  width: calc(100%);
   padding: 0 20px 0 20px;
   overflow-y: auto;
 }
@@ -704,7 +704,7 @@ input[type="number"]::-webkit-inner-spin-button {
   margin-left: auto;
   height: 48px;
   border: 0;
-  width: calc(100% - 40px);
+  width: calc(100%);
   background: transparent;
   font-size: 16px;
   line-height: 40px;
@@ -779,7 +779,7 @@ input[type="number"]::-webkit-inner-spin-button {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: calc(100% - 40px);
+  width: calc(100%);
   padding: 20px;
 }
 .slideMenu .logout .btn {
@@ -806,7 +806,7 @@ input[type="number"]::-webkit-inner-spin-button {
   }
   .topWrap .top {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     height: 56px;
   }
@@ -848,7 +848,7 @@ input[type="number"]::-webkit-inner-spin-button {
     border-top: 0;
   }
   .topWrap .menuBox .dep1 .menu {
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     margin: 0 auto;
     display: flex;
@@ -874,7 +874,7 @@ input[type="number"]::-webkit-inner-spin-button {
     margin-right: 0;
   }
   .topWrap .menuBox .dep2 .menu {
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     margin: 0 auto;
     height: 45px;
@@ -923,7 +923,7 @@ input[type="number"]::-webkit-inner-spin-button {
     position: relative;
     display: flex;
     align-items: center;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     height: 56px;
     margin: 0 auto;
@@ -973,7 +973,7 @@ input[type="number"]::-webkit-inner-spin-button {
     position: relative;
     display: flex;
     align-items: center;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     height: 56px;
     margin: 0 auto;
@@ -1742,7 +1742,7 @@ input[type="number"]::-webkit-inner-spin-button {
   }
   .trendNewsWrap .sideNews {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100%);
     height: auto;
     padding: 0 20px 0 20px;
   }
@@ -1911,7 +1911,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
   .trendNewsWrap .rtNewsTitle {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     display: flex;
     align-items: center;
@@ -1930,7 +1930,7 @@ input[type="number"]::-webkit-inner-spin-button {
   .trendNewsWrap .rtNews {
     position: relative;
     height: auto !important;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
   }
 
@@ -2289,7 +2289,7 @@ input[type="number"]::-webkit-inner-spin-button {
   }
   .trendNewsWrap .sideNews {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100%);
     height: auto;
     padding: 24px 20px 0 20px;
   }
@@ -2621,7 +2621,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
   .dcTrend {
     margin-left: 0;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
   }
   .dcTrend .dcTitle {
@@ -3187,7 +3187,7 @@ input[type="number"]::-webkit-inner-spin-button {
 @media (max-width: 700px) {
   .sectionTitle {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 40px 20px 0 20px;
     margin: 0 0 20px 0;
     border-top: 0;
@@ -3215,7 +3215,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
   .sectionTitleSub {
     position: relative;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
     margin: 40px 0 20px 0;
   }
@@ -3374,7 +3374,7 @@ input[type="number"]::-webkit-inner-spin-button {
     padding: 0 0 0 0;
   }
   .keywordRank.noPd .swiper-wrapper {
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 0 0 20px;
   }
   .keywordRank.noPd .result .swiper-wrapper .swiper-slide:last-child {
@@ -3410,7 +3410,7 @@ input[type="number"]::-webkit-inner-spin-button {
   .rankChart {
     display: block;
     flex-wrap: wrap;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20px 0 20px;
   }
   .rankChart .swiper-slide:first-child {
@@ -4349,7 +4349,7 @@ input[type="number"]::-webkit-inner-spin-button {
     left: calc(50% - 100px);
   }
   .newsLayout .rightWrap .rightSticky .dcTrend {
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 0 20 0 20px;
   }
   .newsLayout
@@ -4728,7 +4728,7 @@ input[type="number"]::-webkit-inner-spin-button {
     position: fixed;
     right: 20px;
     top: 80px;
-    width: calc(100% - 40px);
+    width: calc(100%);
     padding: 22px 0 20px 0;
     border-radius: 16px;
     background-color: #fff;
@@ -7218,7 +7218,7 @@ input[type="number"]::-webkit-inner-spin-button {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: calc(100% - 40px);
+    width: calc(100%);
     background-color: #fff;
     border-radius: 16px;
     padding-bottom: 32px;
@@ -7235,7 +7235,7 @@ input[type="number"]::-webkit-inner-spin-button {
     color: var(--gray70);
   }
   .loginPage .box {
-    width: calc(100% - 40px);
+    width: calc(100%);
   }
   .loginPage .box .btn {
     padding: 0 20px 0 20px;
@@ -7480,7 +7480,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 @media (max-width: 480px) {
   .voteList {
-    width: calc(100% - 40px);
+    width: calc(100%);
     margin: 0 auto;
     padding: 20px 0 0 0;
     text-align: center;
@@ -7834,7 +7834,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 @media (max-width: 480px) {
   .voteWrap {
-    width: calc(100% - 40px);
+    width: calc(100%);
     margin: 0 auto;
     padding: 20px 0 0 0;
   }
@@ -8991,7 +8991,7 @@ input[type="number"]::-webkit-inner-spin-button {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    width: calc(100% - 40px);
+    width: calc(100%);
     margin-right: 0;
     margin-left: 20px;
   }
@@ -9022,7 +9022,7 @@ input[type="number"]::-webkit-inner-spin-button {
     height: 287px;
   }
   .reportWrap .trend .right {
-    width: calc(100% - 40px);
+    width: calc(100%);
     margin: 20px 0 0 20px;
   }
 
@@ -9928,7 +9928,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 @media (max-width: 480px) {
   .myPage {
-    width: calc(100% - 40px);
+    width: calc(100%);
     margin: 0 auto;
     padding: 20px 0 0 0;
   }
@@ -10724,7 +10724,7 @@ input[type="number"]::-webkit-inner-spin-button {
 @media (max-width: 480px) {
   .policy {
     padding: 20px 0 0 0;
-    width: calc(100% - 40px);
+    width: calc(100%);
     margin: 0 auto;
   }
 }
@@ -10811,8 +10811,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .commentWrap .totalCnt span {
   color: var(--gray120);
 }
-.commentWrap .writeBox {
-}
+
 .commentWrap .writeBox .loginFalse {
   display: flex;
 }
