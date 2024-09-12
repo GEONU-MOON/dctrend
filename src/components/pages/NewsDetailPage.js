@@ -7,6 +7,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "../../css/common.css";
 import "../../css/layout.css";
+import share from "../../images/btn_share.svg";
+import fontsize from "../../images/btn_fontsize.svg";
+import useCopyUrl from "../../hooks/useCopyUrl";
+import useKakaoShare from "../../hooks/useKakaoShare";
 
 function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
@@ -16,6 +20,14 @@ function NewsDetailPage() {
   const [recents, setRecents] = useState([]);
   const [comment, setComment] = useState("");
   const [charCount, setCharCount] = useState(0);
+
+  const copyUrlToClipboard = useCopyUrl();
+  const shareToKakao = useKakaoShare();
+
+  const [selectedFontSize, setSelectedFontSize] = useState("ftSz18");
+
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isFontSizeModalOpen, setIsFontSizeModalOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -64,6 +76,28 @@ function NewsDetailPage() {
     }));
   };
 
+  // 글자 크기 변경 함수
+  const changeFontSize = (size) => {
+    setSelectedFontSize(size);
+    setIsFontSizeModalOpen(false); // 글자 크기 모달 닫기
+  };
+
+  // 모달 열기 및 닫기 함수
+  const openShareModal = () => {
+    setIsShareModalOpen(true);
+    setIsFontSizeModalOpen(false); // 다른 모달 닫기
+  };
+
+  const openFontSizeModal = () => {
+    setIsFontSizeModalOpen(true);
+    setIsShareModalOpen(false); // 다른 모달 닫기
+  };
+
+  const closeModals = () => {
+    setIsShareModalOpen(false);
+    setIsFontSizeModalOpen(false);
+  };
+
   return (
     <div>
       <section
@@ -89,8 +123,8 @@ function NewsDetailPage() {
             <ul className="login">로그인</ul>
           </div>
           <div className="mo">
-            <img src="../images/btn_share.svg" alt="" />
-            <img src="../images/btn_fontsize.svg" alt="" />
+            <img src="../../images/btn_share.svg" alt="" />
+            <img src="../../images/btn_fontsize.svg" alt="" />
           </div>
         </div>
         <div className="scrollProcess" style={{ width: "50%" }}></div>
@@ -108,12 +142,86 @@ function NewsDetailPage() {
                   입력 {new Date(newsDetail.publishedAt).toLocaleString()}
                 </ul>
                 <ul className="btn">
-                  <img src="../images/btn_share.svg" alt="" />
-                  <img src="../images/btn_fontsize.svg" alt="" />
+                  <img src={share} alt="" onClick={openShareModal} />
+                  <img src={fontsize} alt="" onClick={openFontSizeModal} />
                 </ul>
               </div>
+              <div className="layerBox">
+                {isShareModalOpen && (
+                  <div className="box share">
+                    <div className="tit">공유</div>
+                    <div className="close" onClick={closeModals}>
+                      <img
+                        src="https://cdn.trend.rankify.best/dctrend/front/images/btn_close_gray.svg"
+                        alt="close"
+                      />
+                    </div>
+                    <div className="cont">
+                      <ul onClick={copyUrlToClipboard}>
+                        <li>
+                          <div className="icoUrl"></div>
+                        </li>
+                        <li>URL복사</li>
+                      </ul>
+                      <ul
+                        onClick={() => {
+                          // console.log(newsDetail);
+                          shareToKakao(
+                            newsDetail.title,
+                            newsDetail.link ||
+                              "이 뉴스의 자세한 내용을 확인하세요.",
+                            newsDetail.thumbnail || "기본 이미지 URL",
+                            window.location.href
+                          );
+                        }}
+                      >
+                        <li>
+                          <div className="icoKakao"></div>
+                        </li>
+                        <li>카카오톡</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {/* 글자 크기 모달 */}
+                {isFontSizeModalOpen && (
+                  <div className="box font">
+                    <div className="tit">글자 크기 설정</div>
+                    <div className="close" onClick={closeModals}>
+                      <img
+                        src="https://cdn.trend.rankify.best/dctrend/front/images/btn_close_gray.svg"
+                        alt="close"
+                      />
+                    </div>
+                    <div className="cont">
+                      <ul
+                        className={selectedFontSize === "ftSz16" ? "on" : ""}
+                        onClick={() => changeFontSize("ftSz16")}
+                      >
+                        <li>가</li>
+                        <li>작게</li>
+                      </ul>
+                      <ul
+                        className={selectedFontSize === "ftSz18" ? "on" : ""}
+                        onClick={() => changeFontSize("ftSz18")}
+                      >
+                        <li>가</li>
+                        <li>보통</li>
+                      </ul>
+                      <ul
+                        className={selectedFontSize === "ftSz20" ? "on" : ""}
+                        onClick={() => changeFontSize("ftSz20")}
+                      >
+                        <li>가</li>
+                        <li>크게</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="contents">
-                <div className="break-words content ftSz18">
+                <div className={`break-words content ${selectedFontSize}`}>
                   <div
                     dangerouslySetInnerHTML={{ __html: newsDetail.content }}
                   />

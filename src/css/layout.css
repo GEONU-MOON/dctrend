@@ -4543,7 +4543,7 @@ input[type="number"]::-webkit-inner-spin-button {
   border-radius: 16px;
   background-color: #fff;
   box-shadow: 0 0 20px 0 #00000033;
-  display: none;
+  z-index: 300;
 }
 .articleWrap .layerBox .box .tit {
   font-size: 18px;
@@ -4573,19 +4573,22 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 33px;
   height: 33px;
   margin: 0 auto;
-  background: url("../images/ico_share_url.svg") no-repeat center center;
+  background: url("https://cdn.trend.rankify.best/dctrend/front/images/ico_share_url.svg")
+    no-repeat center center;
   background-size: contain;
 }
 .articleWrap .layerBox .box.share .cont ul .icoKakao {
   width: 33px;
   height: 33px;
   margin: 0 auto;
-  background: url("../images/ico_share_kakao.svg") no-repeat center center;
+  background: url("https://cdn.trend.rankify.best/dctrend/front/images/ico_share_kakao.svg")
+    no-repeat center center;
   background-size: contain;
 }
 .articleWrap .layerBox .box.share .cont ul:nth-child(1) {
   margin-right: 40px;
 }
+
 .articleWrap .layerBox .box.share .cont ul li:nth-child(2) {
   font-weight: 600;
   line-height: 20px;
