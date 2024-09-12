@@ -10,6 +10,21 @@ import { Navigation } from "swiper/modules";
 
 function Main() {
   const [categories, setCategories] = useState([]);
+  const [swiperInstance, setSwiperInstance] = useState(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (swiperInstance) {
+        swiperInstance.update();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [swiperInstance]);
 
   useEffect(() => {
     axios
@@ -216,6 +231,7 @@ function Main() {
                   spaceBetween: 0,
                 },
               }}
+              onSwiper={setSwiperInstance}
             >
               <SwiperSlide>
                 <ul className="hoverImgPt">
