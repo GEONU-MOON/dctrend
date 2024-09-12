@@ -164,15 +164,16 @@ function NewsDetailPage() {
                         <li>URL복사</li>
                       </ul>
                       <ul
-                        onClick={() =>
+                        onClick={() => {
+                          // console.log(newsDetail);
                           shareToKakao(
                             newsDetail.title,
-                            newsDetail.description ||
+                            newsDetail.link ||
                               "이 뉴스의 자세한 내용을 확인하세요.",
-                            newsDetail.thumbnailUrl || "기본 이미지 URL",
+                            newsDetail.thumbnail || "기본 이미지 URL",
                             window.location.href
-                          )
-                        }
+                          );
+                        }}
                       >
                         <li>
                           <div className="icoKakao"></div>
