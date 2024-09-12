@@ -10,6 +10,7 @@ import "../../css/layout.css";
 import share from "../../images/btn_share.svg";
 import fontsize from "../../images/btn_fontsize.svg";
 import useCopyUrl from "../../hooks/useCopyUrl";
+import useKakaoShare from "../../hooks/useKakaoShare";
 
 function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
@@ -21,11 +22,10 @@ function NewsDetailPage() {
   const [charCount, setCharCount] = useState(0);
 
   const copyUrlToClipboard = useCopyUrl();
+  const shareToKakao = useKakaoShare();
 
-  // 글자 크기 상태 관리
-  const [selectedFontSize, setSelectedFontSize] = useState("ftSz18"); // 기본 값은 18px
+  const [selectedFontSize, setSelectedFontSize] = useState("ftSz18");
 
-  // 모달 상태 관리
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isFontSizeModalOpen, setIsFontSizeModalOpen] = useState(false);
 
@@ -163,7 +163,17 @@ function NewsDetailPage() {
                         </li>
                         <li>URL복사</li>
                       </ul>
-                      <ul>
+                      <ul
+                        onClick={() =>
+                          shareToKakao(
+                            newsDetail.title,
+                            newsDetail.description ||
+                              "이 뉴스의 자세한 내용을 확인하세요.",
+                            newsDetail.thumbnailUrl || "기본 이미지 URL",
+                            window.location.href
+                          )
+                        }
+                      >
                         <li>
                           <div className="icoKakao"></div>
                         </li>
