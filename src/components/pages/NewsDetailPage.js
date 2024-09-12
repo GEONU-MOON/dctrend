@@ -9,6 +9,7 @@ import "../../css/common.css";
 import "../../css/layout.css";
 import share from "../../images/btn_share.svg";
 import fontsize from "../../images/btn_fontsize.svg";
+import useCopyUrl from "../../hooks/useCopyUrl";
 
 function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
@@ -18,6 +19,8 @@ function NewsDetailPage() {
   const [recents, setRecents] = useState([]);
   const [comment, setComment] = useState("");
   const [charCount, setCharCount] = useState(0);
+
+  const copyUrlToClipboard = useCopyUrl();
 
   // 글자 크기 상태 관리
   const [selectedFontSize, setSelectedFontSize] = useState("ftSz18"); // 기본 값은 18px
@@ -154,7 +157,7 @@ function NewsDetailPage() {
                       />
                     </div>
                     <div className="cont">
-                      <ul>
+                      <ul onClick={copyUrlToClipboard}>
                         <li>
                           <div className="icoUrl"></div>
                         </li>
