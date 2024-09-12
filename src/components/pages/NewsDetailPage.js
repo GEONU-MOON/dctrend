@@ -19,6 +19,9 @@ function NewsDetailPage() {
   const [comment, setComment] = useState("");
   const [charCount, setCharCount] = useState(0);
 
+  // 글자 크기 상태 관리
+  const [selectedFontSize, setSelectedFontSize] = useState("ftSz18"); // 기본 값은 18px
+
   // 모달 상태 관리
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isFontSizeModalOpen, setIsFontSizeModalOpen] = useState(false);
@@ -68,6 +71,12 @@ function NewsDetailPage() {
       ...prevClicked,
       [emotionType]: !prevClicked[emotionType],
     }));
+  };
+
+  // 글자 크기 변경 함수
+  const changeFontSize = (size) => {
+    setSelectedFontSize(size);
+    setIsFontSizeModalOpen(false); // 글자 크기 모달 닫기
   };
 
   // 모달 열기 및 닫기 함수
@@ -172,15 +181,24 @@ function NewsDetailPage() {
                       />
                     </div>
                     <div className="cont">
-                      <ul>
+                      <ul
+                        className={selectedFontSize === "ftSz16" ? "on" : ""}
+                        onClick={() => changeFontSize("ftSz16")}
+                      >
                         <li>가</li>
                         <li>작게</li>
                       </ul>
-                      <ul className="on">
+                      <ul
+                        className={selectedFontSize === "ftSz18" ? "on" : ""}
+                        onClick={() => changeFontSize("ftSz18")}
+                      >
                         <li>가</li>
                         <li>보통</li>
                       </ul>
-                      <ul>
+                      <ul
+                        className={selectedFontSize === "ftSz20" ? "on" : ""}
+                        onClick={() => changeFontSize("ftSz20")}
+                      >
                         <li>가</li>
                         <li>크게</li>
                       </ul>
@@ -189,7 +207,7 @@ function NewsDetailPage() {
                 )}
               </div>
               <div className="contents">
-                <div className="break-words content ftSz18">
+                <div className={`break-words content ${selectedFontSize}`}>
                   <div
                     dangerouslySetInnerHTML={{ __html: newsDetail.content }}
                   />
