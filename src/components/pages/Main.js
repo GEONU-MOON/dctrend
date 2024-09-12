@@ -12,10 +12,13 @@ function Main() {
   const [categories, setCategories] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
 
+  // 콘솔에 Swiper 인스턴스가 업데이트될 때 출력하는 코드
   useEffect(() => {
     const handleResize = () => {
       if (swiperInstance) {
-        swiperInstance.update();
+        console.log("Updating Swiper instance...");
+        swiperInstance.update(); // Swiper 레이아웃을 다시 계산하고 업데이트
+        console.log("Swiper instance after update:", swiperInstance);
       }
     };
 
@@ -231,7 +234,10 @@ function Main() {
                   spaceBetween: 0,
                 },
               }}
-              onSwiper={setSwiperInstance}
+              onSwiper={(swiper) => {
+                setSwiperInstance(swiper); // Swiper 인스턴스를 상태로 저장
+                console.log(swiper); // 콘솔에 Swiper 인스턴스 출력
+              }}
             >
               <SwiperSlide>
                 <ul className="hoverImgPt">
