@@ -480,14 +480,18 @@ function CategoryPage() {
                       <li>{index + 1}</li>
                       <li>
                         <Link
-                          to={`/category/${categoryId}/news/${recent.newsId}`}
+                          to={`/category/${
+                            recent.categoryId || categoryId
+                          }/news/${recent.newsId}`}
                         >
                           {recent.title}
                         </Link>
                       </li>
                       <li>
                         <Link
-                          to={`/category/${categoryId}/news/${recent.newsId}`}
+                          to={`/category/${
+                            recent.categoryId || categoryId
+                          }/news/${recent.newsId}`}
                         >
                           <img src={recent.thumbnail} alt={recent.title} />
                         </Link>
@@ -501,7 +505,9 @@ function CategoryPage() {
                   {newsData.newsList.content.slice(0, 4).map((recent) => (
                     <ul key={recent.newsId}>
                       <Link
-                        to={`/category/${categoryId}/news/${recent.newsId}`}
+                        to={`/category/${
+                          recent.categoryId || categoryId
+                        }/news/${recent.newsId}`}
                       >
                         <li>
                           <img src={recent.thumbnail} alt={recent.title} />
