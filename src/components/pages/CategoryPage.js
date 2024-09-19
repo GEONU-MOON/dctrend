@@ -43,7 +43,7 @@ function CategoryPage() {
       // 모든 카테고리 ID들을 쉼표로 구분한 문자열로 반환
       const categoryIdsByCode = getIdsByCode(categories, categoryId);
 
-      // console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
+      console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
 
       if (categoryIdsByCode) {
         // API 요청 URL에 여러 카테고리 ID를 추가
@@ -103,27 +103,32 @@ function CategoryPage() {
             <div className="leftWrap">
               <div className="newsList">
                 <div className="list">
-                  {newsData.newsList.content.map((news) => (
-                    <Link
-                      to={`/category/${categoryId}/news/${news.newsId}`}
-                      key={news.newsId}
-                    >
-                      <ul className="hoverImgPt">
-                        <div className="thumb">
-                          <img src={news.thumbnail} alt={news.title} />
-                        </div>
-                        <li className="tit">{news.title}</li>
-                        <li className="txt">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: cleanHTMLContent(news.content),
-                            }}
-                          />
-                        </li>
-                        <li className="info">{news.pressName}</li>
-                      </ul>
-                    </Link>
-                  ))}
+                  {newsData.newsList.content.map((news) => {
+                    // 링크에서 사용할 카테고리 ID를 설정
+                    const newsCategoryId = news.categoryId || categoryId;
+
+                    return (
+                      <Link
+                        to={`/category/${newsCategoryId}/news/${news.newsId}`} // 변경된 categoryId 사용
+                        key={news.newsId}
+                      >
+                        <ul className="hoverImgPt">
+                          <div className="thumb">
+                            <img src={news.thumbnail} alt={news.title} />
+                          </div>
+                          <li className="tit">{news.title}</li>
+                          <li className="txt">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: cleanHTMLContent(news.content),
+                              }}
+                            />
+                          </li>
+                          <li className="info">{news.pressName}</li>
+                        </ul>
+                      </Link>
+                    );
+                  })}
                 </div>
 
                 <div className="paging">
