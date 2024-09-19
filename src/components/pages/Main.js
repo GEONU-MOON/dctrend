@@ -236,7 +236,7 @@ function Main() {
               }}
               onSwiper={(swiper) => {
                 setSwiperInstance(swiper); // Swiper 인스턴스를 상태로 저장
-                console.log(swiper); // 콘솔에 Swiper 인스턴스 출력
+                // console.log(swiper); // 콘솔에 Swiper 인스턴스 출력
               }}
             >
               <SwiperSlide>
