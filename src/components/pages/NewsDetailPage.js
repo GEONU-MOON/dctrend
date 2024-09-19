@@ -247,7 +247,7 @@ function NewsDetailPage() {
               </div>
             </div>
             <div className="keywordRank">
-              <div className="keyword">
+              {/* <div className="keyword">
                 <div className="items">
                   <div className="swiper keywordItems">
                     <div className="swiper-wrapper">
@@ -278,7 +278,7 @@ function NewsDetailPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="result">
                 <Swiper
