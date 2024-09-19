@@ -43,7 +43,7 @@ function CategoryPage() {
       // 모든 카테고리 ID들을 쉼표로 구분한 문자열로 반환
       const categoryIdsByCode = getIdsByCode(categories, categoryId);
 
-      console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
+      // console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
 
       if (categoryIdsByCode) {
         // API 요청 URL에 여러 카테고리 ID를 추가
