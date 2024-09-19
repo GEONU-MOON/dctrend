@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -9,16 +8,15 @@ import "swiper/css/scrollbar";
 import { Navigation } from "swiper/modules";
 
 function Main() {
-  const [categories, setCategories] = useState([]);
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   // 콘솔에 Swiper 인스턴스가 업데이트될 때 출력하는 코드
   useEffect(() => {
     const handleResize = () => {
       if (swiperInstance) {
-        console.log("Updating Swiper instance...");
+        // console.log("Updating Swiper instance...");
         swiperInstance.update(); // Swiper 레이아웃을 다시 계산하고 업데이트
-        console.log("Swiper instance after update:", swiperInstance);
+        // console.log("Swiper instance after update:", swiperInstance);
       }
     };
 
@@ -28,19 +26,6 @@ function Main() {
       window.removeEventListener("resize", handleResize);
     };
   }, [swiperInstance]);
-
-  useEffect(() => {
-    axios
-      .get("https://api.trend.rankify.best/api/v1/news/categories")
-      .then((response) => {
-        if (response.data.message === "success") {
-          setCategories(response.data.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  });
 
   return (
     <div>
