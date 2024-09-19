@@ -14,6 +14,8 @@ function Header({ categories }) {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // console.log("Categories: ", categories);
+
   return (
     <>
       <section className="topWrap">
@@ -83,22 +85,27 @@ function Header({ categories }) {
                     전체
                   </dt>
                 </Link>
-                {categories.map((category) => (
-                  <Link key={category.id} to={`/category/${category.id}`}>
-                    <dt
-                      className={
-                        location.pathname === `/category/${category.id}` ||
-                        location.pathname.startsWith(
-                          `/category/${category.id}/`
-                        )
-                          ? "on"
-                          : ""
-                      }
+                {/* 카테고리 그룹 렌더링 */}
+                {categories.length > 0 ? (
+                  categories.map((group) => (
+                    <Link
+                      key={group.groupCode}
+                      to={`/category/${group.groupCode}`}
                     >
-                      {category.name}
-                    </dt>
-                  </Link>
-                ))}
+                      <dt
+                        className={
+                          location.pathname === `/category/${group.groupCode}`
+                            ? "on"
+                            : ""
+                        }
+                      >
+                        {group.groupName}
+                      </dt>
+                    </Link>
+                  ))
+                ) : (
+                  <p>카테고리를 불러오는 중입니다...</p>
+                )}
               </dl>
             </li>
           </ul>

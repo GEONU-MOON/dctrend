@@ -32,7 +32,12 @@ function NewsDetailPage() {
   useEffect(() => {
     axios
       .get(
-        `https://api.trend.rankify.best/api/v1/news/${categoryId}/${newsId}?popularNews=10`
+        `https://api.trend.rankify.best/api/v1/news/${categoryId}/${newsId}?popularNews=10`,
+        {
+          headers: {
+            "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+          },
+        }
       )
       .then((response) => {
         if (response.data.message === "success") {
@@ -242,7 +247,7 @@ function NewsDetailPage() {
               </div>
             </div>
             <div className="keywordRank">
-              <div className="keyword">
+              {/* <div className="keyword">
                 <div className="items">
                   <div className="swiper keywordItems">
                     <div className="swiper-wrapper">
@@ -273,7 +278,7 @@ function NewsDetailPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="result">
                 <Swiper

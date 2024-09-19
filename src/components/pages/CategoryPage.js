@@ -4,12 +4,14 @@ import { useSearchParams, useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination as AntPagination } from "antd";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useCategories } from "../../hooks/useCategories";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "antd/dist/reset.css";
+
 import "../../css/common.css";
 import "../../css/layout.css";
+// import "antd/dist/reset.css";
 import logo from "../../images/logo.svg";
 import icoTicket from "../../images/ico_ticket.png";
 import btnClose from "../../images/btn_close.svg";
@@ -18,6 +20,8 @@ import icoLogout from "../../images/ico_logout.svg";
 import btnTop from "../../images/btn_top.svg";
 import useCleanHTML from "../../hooks/useCleanHtml";
 
+const apiUrl = "https://api.trend.rankify.best/";
+
 function CategoryPage() {
   const { categoryId } = useParams();
   const [newsData, setNewsData] = useState({
@@ -25,58 +29,66 @@ function CategoryPage() {
     resents: [],
     populars: [],
   });
-
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 12;
+  const recentNews = 10;
+  const popularNews = 10;
 
-  const [categories, setCategories] = useState([]);
-
+  const categories = useCategories();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);
-
   const { cleanHTMLContent } = useCleanHTML();
 
-  // 카테고리 ID 또는 검색 매개변수가 변경될 때마다 페이지 번호가 없으면 기본적으로 페이지를 1로 설정합니다.
   useEffect(() => {
-    if (!searchParams.get("page")) {
-      setSearchParams({ page: 1 });
+    if (categories.length > 0) {
+      // 모든 카테고리 ID들을 쉼표로 구분한 문자열로 반환
+      const categoryIdsByCode = getIdsByCode(categories, categoryId);
+
+      // console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
+
+      if (categoryIdsByCode) {
+        // API 요청 URL에 여러 카테고리 ID를 추가
+        //
+        axios
+          .get(
+            `${apiUrl}api/v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
+            {
+              headers: {
+                "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+              },
+            }
+          )
+          .then((response) => {
+            if (response.data.message === "success") {
+              // console.log("가져온 뉴스 데이터:", response.data.data);
+              setNewsData(response.data.data);
+              const calculatedTotalPages =
+                response.data.data.newsList.metadata.totalPages;
+              setTotalPages(calculatedTotalPages);
+            }
+          })
+          .catch((error) => {
+            console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
+          });
+      }
     }
-  }, [categoryId, searchParams, setSearchParams]);
+  }, [categoryId, page, pageSize, categories]);
 
-  // 컴포넌트가 마운트될 때 카테고리 목록을 API를 통해 가져오고 성공 시 상태에 저장합니다.
-  useEffect(() => {
-    axios
-      .get("https://api.trend.rankify.best/api/v1/news/categories")
-      .then((response) => {
-        if (response.data.message === "success") {
-          setCategories(response.data.data);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  }, []);
+  // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
+  const getIdsByCode = (categories, categoryCode) => {
+    const categoryGroup = categories.find(
+      (group) => group.groupCode === categoryCode
+    );
 
-  // 카테고리 ID, 페이지 또는 페이지 크기가 변경될 때마다 뉴스 데이터를 API에서 가져와 상태를 업데이트합니다.
-  useEffect(() => {
-    axios
-      .get(
-        `https://api.trend.rankify.best/api/v1/news?categoryId=${categoryId}&size=${pageSize}&page=${page}&recentNews=10&popularNews=10`
-      )
-      .then((response) => {
-        if (response.data.message === "success") {
-          setNewsData(response.data.data);
-          const calculatedTotalPages =
-            response.data.data.newsList.metadata.totalPages;
-          setTotalPages(calculatedTotalPages);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching news data:", error);
-      });
-  }, [categoryId, page, pageSize]);
+    // 매칭된 카테고리 그룹이 있으면 해당 그룹의 모든 카테고리 ID를 쉼표로 구분하여 반환
+    if (categoryGroup && categoryGroup.categories.length > 0) {
+      return categoryGroup.categories.map((category) => category.id).join(",");
+    }
 
-  // 페이지 변경을 처리하는 함수입니다. 새로운 페이지가 유효한 경우 검색 매개변수를 업데이트하고 페이지 상단으로 스크롤합니다.
+    return null;
+  };
+
+  // 페이지 변경
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setSearchParams({ page: newPage });
@@ -92,27 +104,32 @@ function CategoryPage() {
             <div className="leftWrap">
               <div className="newsList">
                 <div className="list">
-                  {newsData.newsList.content.map((news) => (
-                    <Link
-                      to={`/category/${categoryId}/news/${news.newsId}`}
-                      key={news.newsId}
-                    >
-                      <ul className="hoverImgPt">
-                        <div className="thumb">
-                          <img src={news.thumbnail} alt={news.title} />
-                        </div>
-                        <li className="tit">{news.title}</li>
-                        <li className="txt">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: cleanHTMLContent(news.content),
-                            }}
-                          />
-                        </li>
-                        <li className="info">{news.pressName}</li>
-                      </ul>
-                    </Link>
-                  ))}
+                  {newsData.newsList.content.map((news) => {
+                    // 링크에서 사용할 카테고리 ID를 설정
+                    const newsCategoryId = news.categoryId || categoryId;
+
+                    return (
+                      <Link
+                        to={`/category/${newsCategoryId}/news/${news.newsId}`} // 변경된 categoryId 사용
+                        key={news.newsId}
+                      >
+                        <ul className="hoverImgPt">
+                          <div className="thumb">
+                            <img src={news.thumbnail} alt={news.title} />
+                          </div>
+                          <li className="tit">{news.title}</li>
+                          <li className="txt">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: cleanHTMLContent(news.content),
+                              }}
+                            />
+                          </li>
+                          <li className="info">{news.pressName}</li>
+                        </ul>
+                      </Link>
+                    );
+                  })}
                 </div>
 
                 <div className="paging">
