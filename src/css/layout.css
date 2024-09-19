@@ -4470,6 +4470,11 @@ input[type="number"]::-webkit-inner-spin-button {
   line-height: 170%;
   color: #000000;
 }
+
+.articleWrap .content img {
+  max-width: 100%;
+}
+
 .articleWrap .content figcaption {
   padding: 10px 0;
   color: var(--gray70);
@@ -10814,7 +10819,448 @@ input[type="number"]::-webkit-inner-spin-button {
 .commentWrap .totalCnt span {
   color: var(--gray120);
 }
-
+.commentWrap .writeBox {
+}
 .commentWrap .writeBox .loginFalse {
   display: flex;
+  margin-bottom: 12px;
+}
+.commentWrap .writeBox .loginFalse input {
+  line-height: 46px;
+  border: solid 1px var(--gray40);
+  border-radius: 8px;
+  width: calc(50% - 6px);
+  text-indent: 16px;
+  font-weight: 500;
+  color: var(--gray100);
+}
+.commentWrap .writeBox .loginFalse input:focus {
+  border: solid 1px var(--blue100);
+}
+.commentWrap .writeBox .loginFalse input::placeholder {
+  font-weight: 400;
+  color: var(--gray50);
+}
+.commentWrap .writeBox .loginFalse input:nth-child(1) {
+  margin: 0 12px 0 0;
+}
+.commentWrap .textareaBox {
+  border: solid 1px var(--gray40);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fff;
+}
+.commentWrap .textareaBox.active {
+  border: solid 1px var(--blue100);
+}
+.commentWrap .textareaBox .loginTrue {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.commentWrap .textareaBox textarea {
+  border: 0;
+  width: 100%;
+  min-height: 80px;
+  resize: none;
+  margin-bottom: 8px;
+  line-height: 24px;
+  font-size: 16px;
+  font-family: "Pretendard", sans-serif;
+  outline: none;
+}
+.commentWrap .textareaBox textarea::placeholder {
+  color: var(--gray50);
+  white-space: pre-line;
+  font-weight: 400;
+}
+.commentWrap .textareaBox .bot {
+  display: flex;
+  height: 40px;
+  align-items: center;
+}
+.commentWrap .textareaBox .bot ul.limit {
+  flex-grow: 1;
+  text-align: right;
+  padding: 0 16px 0 0;
+  color: var(--gray50);
+  font-size: 12px;
+  font-weight: 500;
+}
+.commentWrap .textareaBox .bot button {
+  width: 66px;
+  line-height: 40px;
+  text-align: center;
+  border: 0;
+  border-radius: 8px;
+  background-color: var(--blue100);
+  margin-left: auto;
+  font-weight: 600;
+  color: #fff;
+  font-family: "Pretendard", sans-serif;
+  cursor: pointer;
+}
+.commentWrap .textareaBox .bot button:disabled {
+  background-color: var(--gray30);
+  color: var(--gray50);
+  cursor: default;
+}
+.commentWrap .tab {
+  margin: 32px 0 0 0;
+  display: flex;
+  padding-bottom: 16px;
+  border-bottom: solid 1px var(--gray120);
+}
+.commentWrap .tab ul {
+  line-height: 24px;
+  margin: 0 24px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray70);
+  cursor: pointer;
+}
+.commentWrap .tab ul.on {
+  color: var(--gray120);
+}
+.commentWrap .commentList {
+  border-bottom: solid 1px var(--gray30);
+}
+.commentWrap .commentList .none {
+  text-align: center;
+  padding: 48px 0 48px 0;
+  line-height: 21px;
+  color: var(--gray70);
+}
+.commentWrap .commentList .none img {
+  margin-bottom: 8px;
+}
+.commentWrap .commentList .list {
+  position: relative;
+  padding: 24px 0 24px 0;
+  border-bottom: solid 1px var(--gray30);
+}
+.commentWrap .commentList .list:last-child {
+  border-bottom: 0;
+}
+.commentWrap .commentList .list .dep1 {
+  position: relative;
+}
+.commentWrap .commentList .list .dep2 {
+  position: relative;
+  padding: 0 16px 16px 16px;
+  background-color: var(--gray10);
+  margin: 20px 0 0 0;
+  border-top: solid 1px var(--gray30);
+}
+.commentWrap .commentList .list .dep2 .writeBox {
+  margin: 24px 0 0 0;
+}
+.commentWrap .commentList .list .dep2 .inList {
+  position: relative;
+  padding: 24px 0 45px 0;
+  border-bottom: solid 1px var(--gray30);
+}
+.commentWrap .commentList .list .dep2 .inList:last-child {
+  border-bottom: 0;
+}
+.commentWrap .commentList .list .info {
+  display: inline-flex;
+  line-height: 24px;
+  align-items: center;
+}
+.commentWrap .commentList .list .info .name {
+  font-weight: 600;
+  color: #222;
+}
+.commentWrap .commentList .list .info .date {
+  position: relative;
+  color: var(--gray70);
+  padding: 0 0 0 8px;
+  margin: 0 0 0 8px;
+}
+.commentWrap .commentList .list .info .date::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 1px;
+  height: 12px;
+  background-color: var(--gray30);
+}
+.commentWrap .commentList .list .menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+.commentWrap .commentList .list .dep2 .inList .menu {
+  top: 24px;
+}
+.commentWrap .commentList .list .menu .menuLayer {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  background-color: #fff;
+  border: solid 1px var(--gray30);
+  border-radius: 8px;
+  padding: 2px;
+  z-index: 100;
+  box-shadow: 0 4px 12px -4px #10182808, 0 12px 20px -8px #10182814;
+}
+.commentWrap .commentList .list .menu .menuLayer .btn {
+  width: 58px;
+  line-height: 36px;
+  text-align: center;
+  border-radius: 8px;
+  color: var(--gray90);
+}
+.commentWrap .commentList .list .menu .menuLayer .btn:hover {
+  background-color: var(--gray10);
+}
+.commentWrap .commentList .list .cont {
+  padding: 16px 0 16px 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+.commentWrap .commentList .list .cont.block {
+  position: relative;
+  color: var(--gray70);
+  padding: 16px 0 16px 32px;
+}
+.commentWrap .commentList .list .cont.block::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background: url("https://cdn.trend.rankify.best/dctrend/front/images/ico_info.svg");
+}
+.commentWrap .commentList .list .reply {
+  display: inline-flex;
+  align-items: center;
+  line-height: 21px;
+  font-weight: 600;
+  color: var(--gray70);
+  cursor: pointer;
+}
+.commentWrap .commentList .list .reply span {
+  color: var(--gray90);
+  margin-left: 4px;
+}
+.commentWrap .commentList .list .reply .arw {
+  transform: rotate(90deg);
+  margin-left: 2px;
+}
+.commentWrap .commentList .list .reply .arw.open {
+  transform: rotate(-90deg);
+}
+.commentWrap .commentList .list .vote {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  line-height: 21px;
+  display: inline-flex;
+  align-items: center;
+}
+.commentWrap .commentList .list .dep2 .inList .vote {
+  bottom: 24px;
+}
+.commentWrap .commentList .list .dep2 .noReplies {
+  text-align: center;
+  color: var(--gray70);
+  padding: 48px 0 24px 0;
+}
+.commentWrap .commentList .list .vote dl img {
+  margin: 0 8px 0 0;
+  cursor: pointer;
+}
+.commentWrap .commentList .list .vote dl.good {
+  color: var(--blue100);
+  margin-right: 20px;
+}
+.commentWrap .commentList .list .vote dl.bad {
+  color: var(--red90);
+}
+.commentWrap .commentList .list .vote dl.good.block img {
+  cursor: default;
+}
+.commentWrap .commentList .list .vote dl.bad.block img {
+  cursor: default;
+}
+.commentWrap .commentList .noComment {
+  text-align: center;
+  padding: 80px 0 80px 0;
+  color: var(--gray70);
+}
+.commentWrap .btnMore {
+  margin: 24px 0 0 0;
+  text-align: center;
+}
+.commentWrap .btnMore .in {
+  display: inline-flex;
+  height: 48px;
+  line-height: 48px;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray90);
+  cursor: pointer;
+}
+.commentWrap .btnMore .in .arw {
+  transform: rotate(90deg);
+  margin-left: 2px;
+}
+.commentWrap .replyClose {
+  text-align: center;
+  padding: 8px 0 0 0;
+}
+.commentWrap .replyClose .in {
+  display: inline-flex;
+  align-items: center;
+  line-height: 36px;
+  cursor: pointer;
+}
+.commentWrap .replyClose .in .arw {
+  transform: rotate(-90deg);
+  margin-left: 2px;
+}
+
+.commentPassword {
+  width: 360px;
+  text-align: center;
+  padding: 24px 0 24px 0;
+}
+.commentPassword .tit {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--blue100);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.commentPassword .txt {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--gray100);
+  margin-bottom: 24px;
+}
+.commentPassword .inp {
+  position: relative;
+  margin: 0 auto;
+  width: 308px;
+  height: 50px;
+}
+.commentPassword .inp img {
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  width: 24px;
+}
+.commentPassword .inp input {
+  line-height: 48px;
+  width: calc(100% - 2px);
+  border: solid 1px var(--gray40);
+  border-radius: 8px;
+  text-indent: 46px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.commentPassword .inp input:focus {
+  border-color: var(--blue100);
+}
+.commentPassword .inp input::placeholder {
+  color: var(--gray50);
+  font-weight: 500;
+}
+
+.commentNotify {
+  width: 360px;
+}
+.commentNotify .tit {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.commentNotify .list textarea {
+  margin: 16px 0 0 0;
+  padding: 16px;
+  border: solid 1px var(--gray40);
+  border-radius: 8px;
+  resize: none;
+  width: calc(100% - 34px);
+  height: 100px;
+  font-family: "Pretendard", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+}
+.commentNotify .list textarea:focus {
+  border: solid 1px var(--blue100);
+}
+.commentNotify .list textarea::placeholder {
+  color: var(--gray50);
+  font-weight: 400;
+}
+.commentNotify .list .limit {
+  text-align: right;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--gray70);
+  font-weight: 600;
+  padding: 8px 0 0 0;
+}
+
+.commentModifyIn {
+  width: 360px;
+}
+.commentModifyIn textarea {
+  margin: 0 0 0 0;
+  padding: 16px;
+  border: solid 1px var(--gray40);
+  border-radius: 8px;
+  resize: none;
+  width: calc(100% - 34px);
+  height: 100px;
+  font-family: "Pretendard", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+}
+.commentModifyIn textarea:focus {
+  border: solid 1px var(--blue100);
+}
+.commentModifyIn textarea::placeholder {
+  color: var(--gray50);
+  font-weight: 400;
+}
+.commentModifyIn .limit {
+  text-align: right;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--gray70);
+  font-weight: 600;
+  padding: 8px 0 0 0;
+}
+
+@media (max-width: 800px) {
+  .commentWrap {
+    margin: 40px 20px 0 20px;
+  }
+}
+@media (max-width: 480px) {
+  .commentWrap .textareaBox textarea {
+    min-height: 120px;
+  }
+  .commentPassword {
+    width: 100%;
+  }
+  .commentPassword .inp {
+    margin: 0 auto;
+    width: calc(100% - 30px);
+  }
+  .commentNotify {
+    width: 100%;
+  }
 }
