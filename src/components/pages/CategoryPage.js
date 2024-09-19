@@ -8,9 +8,10 @@ import { useCategories } from "../../hooks/useCategories";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "antd/dist/reset.css";
+
 import "../../css/common.css";
 import "../../css/layout.css";
+// import "antd/dist/reset.css";
 import logo from "../../images/logo.svg";
 import icoTicket from "../../images/ico_ticket.png";
 import btnClose from "../../images/btn_close.svg";

@@ -4,8 +4,6 @@ import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import AppRouter from "./components/AppRouter";
 import { useCategories } from "./hooks/useCategories";
-import "./css/common.css";
-import "./css/layout.css";
 
 function App() {
   const categories = useCategories();

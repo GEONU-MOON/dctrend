@@ -6,6 +6,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation } from "swiper/modules";
+import "../../css/common.css";
+import "../../css/layout.css";
 
 function Main() {
   const [swiperInstance, setSwiperInstance] = useState(null);
