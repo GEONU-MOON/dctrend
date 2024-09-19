@@ -38,15 +38,19 @@ function CategoryPage() {
   const page = parseInt(searchParams.get("page") || "1", 10);
   const { cleanHTMLContent } = useCleanHTML();
 
-  // 뉴스 데이터 가져오기
   useEffect(() => {
     if (categories.length > 0) {
-      const categoryIdByCode = getIdByCode(categories, categoryId);
+      // 모든 카테고리 ID들을 쉼표로 구분한 문자열로 반환
+      const categoryIdsByCode = getIdsByCode(categories, categoryId);
 
-      if (categoryIdByCode) {
+      // console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
+
+      if (categoryIdsByCode) {
+        // API 요청 URL에 여러 카테고리 ID를 추가
+        //
         axios
           .get(
-            `${apiUrl}api/v1/news?categoryIds=${categoryIdByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
+            `${apiUrl}api/v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
             {
               headers: {
                 "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
@@ -55,7 +59,7 @@ function CategoryPage() {
           )
           .then((response) => {
             if (response.data.message === "success") {
-              // console.log("Fetched news data:", response.data.data); // 콘솔에 뉴스 데이터 확인
+              // console.log("가져온 뉴스 데이터:", response.data.data);
               setNewsData(response.data.data);
               const calculatedTotalPages =
                 response.data.data.newsList.metadata.totalPages;
@@ -63,20 +67,21 @@ function CategoryPage() {
             }
           })
           .catch((error) => {
-            console.error("Error fetching news data:", error);
+            console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
           });
       }
     }
   }, [categoryId, page, pageSize, categories]);
 
-  // 카테고리 코드로 ID를 찾는 함수
-  const getIdByCode = (categories, categoryCode) => {
+  // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
+  const getIdsByCode = (categories, categoryCode) => {
     const categoryGroup = categories.find(
       (group) => group.groupCode === categoryCode
     );
 
+    // 매칭된 카테고리 그룹이 있으면 해당 그룹의 모든 카테고리 ID를 쉼표로 구분하여 반환
     if (categoryGroup && categoryGroup.categories.length > 0) {
-      return categoryGroup.categories[0].id;
+      return categoryGroup.categories.map((category) => category.id).join(",");
     }
 
     return null;
