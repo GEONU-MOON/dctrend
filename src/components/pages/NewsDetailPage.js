@@ -11,6 +11,7 @@ import share from "../../images/btn_share.svg";
 import fontsize from "../../images/btn_fontsize.svg";
 import useCopyUrl from "../../hooks/useCopyUrl";
 import useKakaoShare from "../../hooks/useKakaoShare";
+import CommentWrap from "../comment/comment";
 
 function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
@@ -18,8 +19,6 @@ function NewsDetailPage() {
   const [emotions, setEmotions] = useState([]);
   const [clickedEmotions, setClickedEmotions] = useState([]);
   const [recents, setRecents] = useState([]);
-  const [comment, setComment] = useState("");
-  const [charCount, setCharCount] = useState(0);
 
   const copyUrlToClipboard = useCopyUrl();
   const shareToKakao = useKakaoShare();
@@ -54,12 +53,6 @@ function NewsDetailPage() {
   if (!newsDetail) {
     return <div>Loading...</div>;
   }
-
-  const handleCommentChange = (e) => {
-    const text = e.target.value;
-    setComment(text);
-    setCharCount(text.length);
-  };
 
   const handleEmotionClick = (emotionType) => {
     setEmotions((prevEmotions) =>
@@ -170,7 +163,6 @@ function NewsDetailPage() {
                       </ul>
                       <ul
                         onClick={() => {
-                          // console.log(newsDetail);
                           shareToKakao(
                             newsDetail.title,
                             newsDetail.link ||
@@ -247,39 +239,6 @@ function NewsDetailPage() {
               </div>
             </div>
             <div className="keywordRank">
-              {/* <div className="keyword">
-                <div className="items">
-                  <div className="swiper keywordItems">
-                    <div className="swiper-wrapper">
-                      <div className="swiper-slide">
-                        <ul>치어리더</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul className="on">여자아이돌</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul>남자트로트가수</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul>국내애니메이션</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul>K-POP</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul>여자BJ</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul>리그오브레전드챔피언</ul>
-                      </div>
-                      <div className="swiper-slide">
-                        <ul>여자아나운서</ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-
               <div className="result">
                 <Swiper
                   className="keywordResult"
@@ -324,7 +283,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -341,7 +300,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -358,7 +317,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -375,7 +334,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -392,7 +351,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -409,7 +368,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -426,7 +385,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -443,7 +402,7 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul>
                       <li className="thumb">
@@ -460,20 +419,19 @@ function NewsDetailPage() {
                       <li className="vote">4,224표</li>
                       <li className="btn">투표</li>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <SwiperSlide>
                     <ul className="more">
                       <div className="all">
                         전체 순위 보러가기<div className="arwBlue s16"></div>
                       </div>
                     </ul>
-                  </SwiperSlide>{" "}
+                  </SwiperSlide>
                   <div className="swiper-button-next"></div>
                   <div className="swiper-button-prev"></div>
                 </Swiper>
               </div>
-            </div>
-
+            </div>{" "}
             <div className="sectionTitleSub">
               <div className="title">이 기사, 어떠셨나요?</div>
             </div>
@@ -491,40 +449,7 @@ function NewsDetailPage() {
                 </ul>
               ))}
             </div>
-            <div className="commentWrap">
-              <div className="totalCnt">댓글 0</div>
-              <div className="loginFalse">
-                <input
-                  className="inputField"
-                  name="nick"
-                  type="text"
-                  placeholder="닉네임"
-                />
-                <input
-                  className="inputField"
-                  name="password"
-                  type="password"
-                  placeholder="비밀번호"
-                />
-              </div>
-              <div className="writeBox">
-                <div className="textareaBox">
-                  <textarea
-                    className="commentText"
-                    value={comment}
-                    onChange={handleCommentChange}
-                    maxLength={500}
-                    placeholder="타인의 권리를 침해하거나 비하하는 댓글은 허용되지 않으며, 위반 시 삭제 및 제재될 수 있습니다. 건전한 토론 문화를 위해 협조 부탁드립니다."
-                  ></textarea>
-                  <div className="charCountSubmitWrap">
-                    <span className="charCount">{charCount}/500</span>
-                    <button className="submitBtn" disabled={charCount === 0}>
-                      등록
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CommentWrap id={newsId} />
           </div>
 
           <div className="rightWrap">
