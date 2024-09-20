@@ -13,7 +13,7 @@ function CommentWrap(props) {
   const [hasMore, setHasMore] = useState(true);
   const [showDep2, setShowDep2] = useState({});
 
-  const fetchComment = async (page, sort) => {
+  const fetchComment = async (page, sort, reset = false) => {
     try {
       const url = `${apiUrl}api/v1/comments/news?entityId=${props.id}&page=${page}&size=10&sort=${sort}`;
       const response = await axios.get(url, {
@@ -25,20 +25,23 @@ function CommentWrap(props) {
       const data = response.data;
       console.log("API Response:", data); // 응답 데이터 확인
 
-      // 예외 처리: 데이터가 있는지 확인
       if (data && data.data && data.data.content) {
         const { content, metadata } = data.data;
         setMetaData(metadata);
 
-        if (content.length > 0) {
-          setComment((prevItems) => [...prevItems, ...content]);
+        // 새 페이지 데이터를 불러올 때, 초기화 여부에 따라 처리
+        if (reset) {
+          setComment(content); // 초기화 후 새로운 댓글 저장
+        } else {
+          setComment((prevItems) => [...prevItems, ...content]); // 기존 댓글 유지 후 추가
         }
 
+        // 현재 페이지가 마지막 페이지인 경우 더 불러올 수 없도록 설정
         if (metadata.currentPage === metadata.totalPages) {
-          setHasMore(false);
+          setHasMore(false); // 더 이상 페이지가 없으므로 hasMore를 false로 설정
+        } else {
+          setHasMore(true); // 아직 더 불러올 페이지가 있으면 true로 유지
         }
-      } else {
-        console.error("API 응답에 content 또는 metadata가 없습니다.");
       }
     } catch (error) {
       console.error("데이터를 불러오는데 실패했습니다.", error);
@@ -46,12 +49,17 @@ function CommentWrap(props) {
   };
 
   useEffect(() => {
-    fetchComment(page, sort);
-  }, [page, sort]);
+    // 컴포넌트가 처음 마운트되었을 때 댓글을 초기화하고 가져옴
+    fetchComment(1, sort, true);
+  }, [props.id, sort]); // 의존성 배열에서 불필요한 값 제거
 
   // 댓글 더 불러오기
   const loadMore = () => {
-    setPage((prevPage) => prevPage + 1);
+    if (hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchComment(nextPage, sort, false); // 기존 댓글 유지하면서 더 불러옴
+    }
   };
 
   // 답글 토글
@@ -66,13 +74,13 @@ function CommentWrap(props) {
   const commentReset = () => {
     setComment([]); // 기존 댓글 목록을 지웁니다.
     setPage(1); // 페이지 번호를 1로 초기화합니다.
-    fetchComment(1, sort); // 페이지 1로 초기화
+    fetchComment(1, sort, true); // 페이지 1로 초기화
   };
 
   // 정렬 변경
   const handleSortChange = (newSort) => {
     setPage(1); // 페이지 번호 초기화
-    setComment([]); // 기존 댓글 목록 초기화
+    fetchComment(1, newSort, true); // 기존 댓글 초기화 후 새로 불러옴
     setSort(newSort); // 새로운 sort 값 설정
   };
 
