@@ -21,13 +21,24 @@ function CommentWrap(props) {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
         },
       });
+
       const data = response.data;
-      setMetaData(data.metadata);
-      if (data.content.length > 0) {
-        setComment((prevItems) => [...prevItems, ...data.content]);
-      }
-      if (data.metadata.currentPage === data.metadata.totalPages) {
-        setHasMore(false);
+      console.log("API Response:", data); // 응답 데이터 확인
+
+      // 예외 처리: 데이터가 있는지 확인
+      if (data && data.data && data.data.content) {
+        const { content, metadata } = data.data;
+        setMetaData(metadata);
+
+        if (content.length > 0) {
+          setComment((prevItems) => [...prevItems, ...content]);
+        }
+
+        if (metadata.currentPage === metadata.totalPages) {
+          setHasMore(false);
+        }
+      } else {
+        console.error("API 응답에 content 또는 metadata가 없습니다.");
       }
     } catch (error) {
       console.error("데이터를 불러오는데 실패했습니다.", error);
