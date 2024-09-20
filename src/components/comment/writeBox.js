@@ -32,18 +32,20 @@ function WriteBox({
         contentId: contentsId,
       };
 
-      // If it's a reply, include the parent comment ID
       if (saveType === "REPLY") {
         params.parentCommentId = commentId;
       }
 
-      // API 요청 (POST 요청)
-      await axios.post(url, params);
+      console.log("Sending comment data:", params);
 
-      // 댓글 저장 후 텍스트 필드 초기화
+      await axios.post(url, params, {
+        headers: {
+          "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+        },
+      });
+
       setText("");
 
-      // isReset이 있으면 콜백 호출
       if (isReset) isReset();
     } catch (error) {
       console.error("Error saving comment:", error);
