@@ -10852,6 +10852,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .commentWrap .textareaBox.active {
   border: solid 1px var(--blue100);
 }
+
+.articleWrap .content p {
+  margin-bottom: 24px;
+}
 .commentWrap .textareaBox .loginTrue {
   font-size: 16px;
   line-height: 24px;
