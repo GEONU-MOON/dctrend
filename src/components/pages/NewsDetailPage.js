@@ -11,7 +11,7 @@ import share from "../../images/btn_share.svg";
 import fontsize from "../../images/btn_fontsize.svg";
 import useCopyUrl from "../../hooks/useCopyUrl";
 import useKakaoShare from "../../hooks/useKakaoShare";
-import WriteBox from "../comment/writeBox";
+import CommentWrap from "../comment/comment";
 
 function NewsDetailPage() {
   const { categoryId, newsId } = useParams();
@@ -19,8 +19,6 @@ function NewsDetailPage() {
   const [emotions, setEmotions] = useState([]);
   const [clickedEmotions, setClickedEmotions] = useState([]);
   const [recents, setRecents] = useState([]);
-  const [comment, setComment] = useState("");
-  const [charCount, setCharCount] = useState(0);
 
   const copyUrlToClipboard = useCopyUrl();
   const shareToKakao = useKakaoShare();
@@ -55,12 +53,6 @@ function NewsDetailPage() {
   if (!newsDetail) {
     return <div>Loading...</div>;
   }
-
-  const handleCommentChange = (e) => {
-    const text = e.target.value;
-    setComment(text);
-    setCharCount(text.length);
-  };
 
   const handleEmotionClick = (emotionType) => {
     setEmotions((prevEmotions) =>
@@ -439,8 +431,7 @@ function NewsDetailPage() {
                   <div className="swiper-button-prev"></div>
                 </Swiper>
               </div>
-            </div>
-
+            </div>{" "}
             <div className="sectionTitleSub">
               <div className="title">이 기사, 어떠셨나요?</div>
             </div>
@@ -458,17 +449,7 @@ function NewsDetailPage() {
                 </ul>
               ))}
             </div>
-            <div className="commentWrap">
-              <div className="totalCnt">댓글 0</div>
-
-              {/* WriteBox 컴포넌트를 댓글 폼으로 사용 */}
-              <WriteBox
-                contentsId={newsId}
-                commentId={null}
-                saveType="COMMENT"
-                isReset={null}
-              />
-            </div>
+            <CommentWrap id={newsId} />
           </div>
 
           <div className="rightWrap">
