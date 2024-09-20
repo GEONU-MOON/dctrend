@@ -21,23 +21,32 @@ function CommentModify({ isOpen, onClose, isReset, id, txt, type }) {
       return;
     }
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/news/confirm-password`;
+      const url = `https://api.trend.rankify.best/api/v1/comments/news/cofirm-password`;
       const params = {
         id: id,
         type: type,
         password: password,
       };
+
+      console.log("Password check URL:", url);
+      console.log("Password check params:", params);
+
       const response = await axios.post(url, params, {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
         },
       });
+
+      console.log("Password check response:", response);
+
       if (isReset && response.data.message === "success") {
         setShowPasswordInput(false);
         setShowEdit(true);
+      } else {
+        console.log("Password check failed:", response.data);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error during password check:", error);
     }
   };
 
@@ -64,14 +73,25 @@ function CommentModify({ isOpen, onClose, isReset, id, txt, type }) {
         comment: commentText,
         password: password,
       };
+
+      console.log("Modify confirm URL:", url);
+      console.log("Modify confirm params:", params);
+
       const response = await axios.post(url, params, {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
         },
       });
-      if (isReset && response.data.message === "success") isReset(); // 댓글 수정 후 콜백 호출
+
+      console.log("Modify confirm response:", response);
+
+      if (isReset && response.data.message === "success") {
+        isReset(); // 댓글 수정 후 콜백 호출
+      } else {
+        console.log("Modify failed:", response.data);
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error during modify confirm:", error);
     }
   };
 
