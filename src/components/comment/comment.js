@@ -16,6 +16,7 @@ function CommentWrap(props) {
   const fetchComment = async (page, sort, reset = false) => {
     try {
       const url = `${apiUrl}api/v1/comments/news?entityId=${props.id}&page=${page}&size=10&sort=${sort}`;
+      console.log("Request URL: ", url);
       const response = await axios.get(url, {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
@@ -146,6 +147,12 @@ function CommentWrap(props) {
                     type="COMMENT"
                     state={comment.status}
                   />
+                  {console.log(
+                    "LikeCount:",
+                    comment.likeCount,
+                    "DislikeCount:",
+                    comment.dislikeCount
+                  )}
                 </div>
                 {showDep2[index] && (
                   <div className="dep2">

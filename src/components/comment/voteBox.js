@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function VoteBox({ initialGood, initialBad, id, type, state }) {
   const [good, setGood] = useState(initialGood);
   const [bad, setBad] = useState(initialBad);
+
+  // initialGood 또는 initialBad가 변경될 때 상태 업데이트
+  useEffect(() => {
+    setGood(initialGood);
+    setBad(initialBad);
+  }, [initialGood, initialBad]);
 
   // 투표 처리 함수
   const handleClick = async (feel) => {
