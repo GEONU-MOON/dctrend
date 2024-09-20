@@ -9,24 +9,27 @@ function CommentNotify({ isOpen, onClose, id, type }) {
   const [value, setValue] = useState(null);
   const [text, setText] = useState("");
 
+  // 신고 버튼 클릭 시에만 신고 사유 목록을 불러오도록 수정
   useEffect(() => {
-    const reasonsLoad = async () => {
-      try {
-        const response = await axios.get(
-          "https://api.trend.rankify.best/api/v1/common/report-reasons",
-          {
-            headers: {
-              "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
-            },
-          }
-        );
-        setList(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    reasonsLoad();
-  });
+    if (isOpen) {
+      const reasonsLoad = async () => {
+        try {
+          const response = await axios.get(
+            "https://api.trend.rankify.best/api/v1/common/report-reasons",
+            {
+              headers: {
+                "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+              },
+            }
+          );
+          setList(response.data.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      reasonsLoad();
+    }
+  }, [isOpen]); // isOpen이 true일 때만 실행
 
   const onChange = (e) => {
     setValue(e.target.value);
