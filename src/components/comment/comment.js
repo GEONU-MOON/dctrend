@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import WriteBox from "./writeBox";
 import VoteBox from "./voteBox";
+import SideMenuBox from "./sideMenu";
 import { formatDateKr } from "../../hooks/useFormatDate";
 
 function CommentWrap(props) {
@@ -16,7 +17,6 @@ function CommentWrap(props) {
   const fetchComment = async (page, sort, reset = false) => {
     try {
       const url = `${apiUrl}api/v1/comments/news?entityId=${props.id}&page=${page}&size=10&sort=${sort}`;
-      console.log("Request URL: ", url);
       const response = await axios.get(url, {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
@@ -24,24 +24,20 @@ function CommentWrap(props) {
       });
 
       const data = response.data;
-      console.log("API Response:", data); // 응답 데이터 확인
-
       if (data && data.data && data.data.content) {
         const { content, metadata } = data.data;
         setMetaData(metadata);
 
-        // 새 페이지 데이터를 불러올 때, 초기화 여부에 따라 처리
         if (reset) {
           setComment(content); // 초기화 후 새로운 댓글 저장
         } else {
           setComment((prevItems) => [...prevItems, ...content]); // 기존 댓글 유지 후 추가
         }
 
-        // 현재 페이지가 마지막 페이지인 경우 더 불러올 수 없도록 설정
         if (metadata.currentPage === metadata.totalPages) {
-          setHasMore(false); // 더 이상 페이지가 없으므로 hasMore를 false로 설정
+          setHasMore(false);
         } else {
-          setHasMore(true); // 아직 더 불러올 페이지가 있으면 true로 유지
+          setHasMore(true);
         }
       }
     } catch (error) {
@@ -50,20 +46,17 @@ function CommentWrap(props) {
   };
 
   useEffect(() => {
-    // 컴포넌트가 처음 마운트되었을 때 댓글을 초기화하고 가져옴
     fetchComment(1, sort, true);
-  }, [props.id, sort]); // 의존성 배열에서 불필요한 값 제거
+  }, [props.id, sort]);
 
-  // 댓글 더 불러오기
   const loadMore = () => {
     if (hasMore) {
       const nextPage = page + 1;
       setPage(nextPage);
-      fetchComment(nextPage, sort, false); // 기존 댓글 유지하면서 더 불러옴
+      fetchComment(nextPage, sort, false);
     }
   };
 
-  // 답글 토글
   const handleReplyClick = (index) => {
     setShowDep2((prevState) => ({
       ...prevState,
@@ -71,24 +64,21 @@ function CommentWrap(props) {
     }));
   };
 
-  // 댓글 초기화
   const commentReset = () => {
-    setComment([]); // 기존 댓글 목록을 지웁니다.
-    setPage(1); // 페이지 번호를 1로 초기화합니다.
-    fetchComment(1, sort, true); // 페이지 1로 초기화
+    setComment([]);
+    setPage(1);
+    fetchComment(1, sort, true);
   };
 
-  // 정렬 변경
   const handleSortChange = (newSort) => {
-    setPage(1); // 페이지 번호 초기화
-    fetchComment(1, newSort, true); // 기존 댓글 초기화 후 새로 불러옴
-    setSort(newSort); // 새로운 sort 값 설정
+    setPage(1);
+    fetchComment(1, newSort, true);
+    setSort(newSort);
   };
 
   return (
     <>
       <div className="commentWrap">
-        {/* metaData가 있을 때만 totalCounts를 렌더링 */}
         <div className="totalCnt">
           댓글 {metaData ? metaData.totalCounts : 0}
         </div>
@@ -127,6 +117,13 @@ function CommentWrap(props) {
                     <dl className="name">{comment.nickName}</dl>
                     <dl className="date">{formatDateKr(comment.createdAt)}</dl>
                   </li>
+                  <SideMenuBox
+                    isReset={commentReset}
+                    id={comment.id}
+                    txt={comment.comment}
+                    type="COMMENT"
+                    state={comment.status}
+                  />
                   <li
                     className={`cont ${
                       comment.status === "INACTIVE" ? "block" : ""
@@ -147,12 +144,6 @@ function CommentWrap(props) {
                     type="COMMENT"
                     state={comment.status}
                   />
-                  {console.log(
-                    "LikeCount:",
-                    comment.likeCount,
-                    "DislikeCount:",
-                    comment.dislikeCount
-                  )}
                 </div>
                 {showDep2[index] && (
                   <div className="dep2">
@@ -165,6 +156,13 @@ function CommentWrap(props) {
                               {formatDateKr(reply.createdAt)}
                             </dl>
                           </li>
+                          <SideMenuBox
+                            isReset={commentReset}
+                            id={reply.id}
+                            txt={reply.comment}
+                            type="REPLY"
+                            state={reply.status}
+                          />
                           <li
                             className={`cont ${
                               reply.status === "INACTIVE" ? "block" : ""
