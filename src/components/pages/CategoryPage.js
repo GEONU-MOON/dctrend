@@ -45,10 +45,8 @@ function CategoryPage() {
       if (categories.length > 0) {
         const categoryIdsByCode = getIdsByCode(categories, categoryId);
         if (categoryIdsByCode) {
-          // 데이터 요청 시작 시 로딩 상태 true
           setIsLoading(true);
 
-          // 인위적으로 지연 시간 적용
           setTimeout(() => {
             axios
               .get(
@@ -62,8 +60,6 @@ function CategoryPage() {
               .then((response) => {
                 if (response.data.message === "success") {
                   const newContent = response.data.data.newsList.content;
-
-                  console.log(`Fetched ${newContent.length} new articles.`);
 
                   setNewsData((prevState) => {
                     const updatedContent =
@@ -91,10 +87,9 @@ function CategoryPage() {
                 console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
               })
               .finally(() => {
-                // 데이터 요청 완료 후 로딩 상태 false
                 setIsLoading(false);
               });
-          }, 1000); // 1초의 지연 시간 적용
+          }, 500);
         }
       }
     },
@@ -123,7 +118,7 @@ function CategoryPage() {
         setCurrentPage((prevPage) => prevPage + 1);
       }
     },
-    [currentPage, totalPages, isLoading] // isLoading 상태 추가
+    [currentPage, totalPages, isLoading]
   );
 
   // Intersection Observer 설정
@@ -166,45 +161,39 @@ function CategoryPage() {
           <div className="newsLayout">
             <div className="leftWrap">
               <div className="newsList">
-                <Spin spinning={isLoading} tip="Loading...">
-                  {" "}
-                  {/* 로딩 스피너 적용 */}
-                  <div className="list">
-                    {newsData.newsList.content.map((news) => {
-                      const newsCategoryId = news.categoryId || categoryId;
-                      return (
-                        <Link
-                          to={`/category/${newsCategoryId}/news/${news.newsId}`}
-                          key={news.newsId}
-                        >
-                          <ul className="hoverImgPt">
-                            <div className="thumb">
-                              <img src={news.thumbnail} alt={news.title} />
-                            </div>
-                            <li className="tit">{news.title}</li>
-                            <li className="txt">
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: cleanHTMLContent(news.content),
-                                }}
-                              />
-                            </li>
-                            <li className="info">{news.pressName}</li>
-                          </ul>
-                        </Link>
-                      );
-                    })}
+                <div className="list">
+                  {newsData.newsList.content.map((news, index) => {
+                    const newsCategoryId = news.categoryId || categoryId;
+                    return (
+                      <Link
+                        to={`/category/${newsCategoryId}/news/${news.newsId}`}
+                        key={`${news.newsId}-${index}`}
+                      >
+                        <ul className="hoverImgPt">
+                          <div className="thumb">
+                            <img src={news.thumbnail} alt={news.title} />
+                          </div>
+                          <li className="tit">{news.title}</li>
+                          <li className="txt">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: cleanHTMLContent(news.content),
+                              }}
+                            />
+                          </li>
+                          <li className="info">{news.pressName}</li>
+                        </ul>
+                      </Link>
+                    );
+                  })}
+                </div>
+                {/* 스피너를 목록 끝에 표시 */}
+                {isLoading && (
+                  <div style={{ textAlign: "center", marginTop: "20px" }}>
+                    <Spin tip="Loading more articles..." />
                   </div>
-                </Spin>{" "}
-                {/* 로딩 스피너 적용 끝 */}
-                <div
-                  ref={observerRef}
-                  style={{
-                    height: "10px",
-                    backgroundColor: "red", // 빨간 선 추가
-                    marginBottom: "20px",
-                  }}
-                ></div>
+                )}
+                <div ref={observerRef} style={{ height: "20px" }}></div>
               </div>
             </div>
 
