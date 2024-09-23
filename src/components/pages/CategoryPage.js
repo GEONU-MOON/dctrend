@@ -58,9 +58,11 @@ function CategoryPage() {
                 }
               )
               .then((response) => {
+                console.log(response.data.data);
                 if (response.data.message === "success") {
                   const newContent = response.data.data.newsList.content;
-
+                  console.log("Fetched news:", newContent);
+                  console.log("Fetched resents:", response.data.data.resents); // 추가된 로그
                   setNewsData((prevState) => {
                     const updatedContent =
                       page === 1
@@ -526,29 +528,33 @@ function CategoryPage() {
 
                 <div className="stickyTitle">실시간 인기기사</div>
                 <div className="popularNewsRight">
-                  {newsData.resents.slice(0, 5).map((recent, index) => (
-                    <ul key={recent.newsId}>
-                      <li>{index + 1}</li>
-                      <li>
-                        <Link
-                          to={`/category/${
-                            recent.categoryId || categoryId
-                          }/news/${recent.newsId}`}
-                        >
-                          {recent.title}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to={`/category/${
-                            recent.categoryId || categoryId
-                          }/news/${recent.newsId}`}
-                        >
-                          <img src={recent.thumbnail} alt={recent.title} />
-                        </Link>
-                      </li>
-                    </ul>
-                  ))}
+                  {newsData.resents.length > 0 ? (
+                    newsData.resents.slice(0, 5).map((recent, index) => (
+                      <ul key={`${recent.newsId}-${index}`}>
+                        <li>{index + 1}</li>
+                        <li>
+                          <Link
+                            to={`/category/${
+                              recent.categoryId || categoryId
+                            }/news/${recent.newsId}`}
+                          >
+                            {recent.title}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to={`/category/${
+                              recent.categoryId || categoryId
+                            }/news/${recent.newsId}`}
+                          >
+                            <img src={recent.thumbnail} alt={recent.title} />
+                          </Link>
+                        </li>
+                      </ul>
+                    ))
+                  ) : (
+                    <p>실시간 인기 기사를 불러오는 중입니다...</p>
+                  )}
                 </div>
 
                 <div className="stickyTitle">최신 기사</div>
