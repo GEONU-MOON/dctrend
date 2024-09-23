@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { useSearchParams, useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,6 +11,7 @@ import "swiper/css/pagination";
 
 import "../../css/common.css";
 import "../../css/layout.css";
+import { Spin } from "antd";
 // import "antd/dist/reset.css";
 import logo from "../../images/logo.svg";
 import icoTicket from "../../images/ico_ticket.png";
@@ -30,49 +31,75 @@ function CategoryPage() {
     populars: [],
   });
   const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
   const pageSize = 12;
-  const recentNews = 10;
-  const popularNews = 10;
+  const observerRef = useRef(); // Intersection Observer를 설정할 ref
 
   const categories = useCategories();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1", 10);
   const { cleanHTMLContent } = useCleanHTML();
 
-  useEffect(() => {
-    if (categories.length > 0) {
-      // 모든 카테고리 ID들을 쉼표로 구분한 문자열로 반환
-      const categoryIdsByCode = getIdsByCode(categories, categoryId);
+  // 데이터 로드 함수
+  const loadNewsData = useCallback(
+    (page = 1) => {
+      if (categories.length > 0) {
+        const categoryIdsByCode = getIdsByCode(categories, categoryId);
+        if (categoryIdsByCode) {
+          // 데이터 요청 시작 시 로딩 상태 true
+          setIsLoading(true);
 
-      // console.log("매핑된 카테고리 ID들:", categoryIdsByCode); // 여러 ID 출력 확인
+          // 인위적으로 지연 시간 적용
+          setTimeout(() => {
+            axios
+              .get(
+                `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}`,
+                {
+                  headers: {
+                    "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+                  },
+                }
+              )
+              .then((response) => {
+                if (response.data.message === "success") {
+                  const newContent = response.data.data.newsList.content;
 
-      if (categoryIdsByCode) {
-        // API 요청 URL에 여러 카테고리 ID를 추가
-        //
-        axios
-          .get(
-            `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
-            {
-              headers: {
-                "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
-              },
-            }
-          )
-          .then((response) => {
-            if (response.data.message === "success") {
-              // console.log("가져온 뉴스 데이터:", response.data.data);
-              setNewsData(response.data.data);
-              const calculatedTotalPages =
-                response.data.data.newsList.metadata.totalPages;
-              setTotalPages(calculatedTotalPages);
-            }
-          })
-          .catch((error) => {
-            console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
-          });
+                  console.log(`Fetched ${newContent.length} new articles.`);
+
+                  setNewsData((prevState) => {
+                    const updatedContent =
+                      page === 1
+                        ? newContent
+                        : [...prevState.newsList.content, ...newContent];
+
+                    return {
+                      ...prevState,
+                      newsList: {
+                        ...prevState.newsList,
+                        content: updatedContent,
+                      },
+                      resents: response.data.data.resents,
+                      populars: response.data.data.populars,
+                    };
+                  });
+
+                  setTotalPages(
+                    response.data.data.newsList.metadata.totalPages
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
+              })
+              .finally(() => {
+                // 데이터 요청 완료 후 로딩 상태 false
+                setIsLoading(false);
+              });
+          }, 1000); // 1초의 지연 시간 적용
+        }
       }
-    }
-  }, [categoryId, page, pageSize, categories]);
+    },
+    [categories, categoryId]
+  );
 
   // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
   const getIdsByCode = (categories, categoryCode) => {
@@ -80,7 +107,6 @@ function CategoryPage() {
       (group) => group.groupCode === categoryCode
     );
 
-    // 매칭된 카테고리 그룹이 있으면 해당 그룹의 모든 카테고리 ID를 쉼표로 구분하여 반환
     if (categoryGroup && categoryGroup.categories.length > 0) {
       return categoryGroup.categories.map((category) => category.id).join(",");
     }
@@ -88,13 +114,50 @@ function CategoryPage() {
     return null;
   };
 
-  // 페이지 변경
-  const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setSearchParams({ page: newPage });
-      window.scrollTo({ top: 0 });
+  // Intersection Observer 콜백 함수
+  const handleObserver = useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && !isLoading && currentPage < totalPages) {
+        console.log("스크롤 끝에 도달, 다음 페이지 요청");
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    },
+    [currentPage, totalPages, isLoading] // isLoading 상태 추가
+  );
+
+  // Intersection Observer 설정
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [handleObserver]);
+
+  // 페이지가 변경될 때마다 데이터 로드
+  useEffect(() => {
+    if (currentPage === 1) {
+      setNewsData({
+        newsList: { content: [] },
+        resents: [],
+        populars: [],
+      }); // 기존 데이터 초기화
     }
-  };
+    loadNewsData(currentPage);
+  }, [currentPage, categoryId, loadNewsData]);
+
+  // 카테고리 변경 시 페이지를 초기화
+  useEffect(() => {
+    setCurrentPage(1); // 페이지 초기화
+  }, [categoryId]);
 
   return (
     <>
@@ -103,46 +166,45 @@ function CategoryPage() {
           <div className="newsLayout">
             <div className="leftWrap">
               <div className="newsList">
-                <div className="list">
-                  {newsData.newsList.content.map((news) => {
-                    // 링크에서 사용할 카테고리 ID를 설정
-                    const newsCategoryId = news.categoryId || categoryId;
-
-                    return (
-                      <Link
-                        to={`/category/${newsCategoryId}/news/${news.newsId}`} // 변경된 categoryId 사용
-                        key={news.newsId}
-                      >
-                        <ul className="hoverImgPt">
-                          <div className="thumb">
-                            <img src={news.thumbnail} alt={news.title} />
-                          </div>
-                          <li className="tit">{news.title}</li>
-                          <li className="txt">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: cleanHTMLContent(news.content),
-                              }}
-                            />
-                          </li>
-                          <li className="info">{news.pressName}</li>
-                        </ul>
-                      </Link>
-                    );
-                  })}
-                </div>
-
-                <div className="paging">
-                  <AntPagination
-                    current={page}
-                    pageSize={pageSize}
-                    total={totalPages * pageSize}
-                    onChange={handlePageChange}
-                    showSizeChanger={false}
-                    hideOnSinglePage={true}
-                    showQuickJumper={false}
-                  />
-                </div>
+                <Spin spinning={isLoading} tip="Loading...">
+                  {" "}
+                  {/* 로딩 스피너 적용 */}
+                  <div className="list">
+                    {newsData.newsList.content.map((news) => {
+                      const newsCategoryId = news.categoryId || categoryId;
+                      return (
+                        <Link
+                          to={`/category/${newsCategoryId}/news/${news.newsId}`}
+                          key={news.newsId}
+                        >
+                          <ul className="hoverImgPt">
+                            <div className="thumb">
+                              <img src={news.thumbnail} alt={news.title} />
+                            </div>
+                            <li className="tit">{news.title}</li>
+                            <li className="txt">
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: cleanHTMLContent(news.content),
+                                }}
+                              />
+                            </li>
+                            <li className="info">{news.pressName}</li>
+                          </ul>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </Spin>{" "}
+                {/* 로딩 스피너 적용 끝 */}
+                <div
+                  ref={observerRef}
+                  style={{
+                    height: "10px",
+                    backgroundColor: "red", // 빨간 선 추가
+                    marginBottom: "20px",
+                  }}
+                ></div>
               </div>
             </div>
 
