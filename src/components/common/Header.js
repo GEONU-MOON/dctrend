@@ -107,6 +107,36 @@ function Header({ categories }) {
                   <p>카테고리를 불러오는 중입니다...</p>
                 )}
               </dl>
+            </li>{" "}
+            <li className="menu">
+              <dl className="on">
+                <Link to="/">
+                  <dt className={location.pathname === "/" ? "on" : ""}>
+                    전체
+                  </dt>
+                </Link>
+                {/* 카테고리 그룹 렌더링 */}
+                {categories.length > 0 ? (
+                  categories.map((group) => (
+                    <Link
+                      key={group.groupCode}
+                      to={`/category/${group.groupCode}`}
+                    >
+                      <dt
+                        className={
+                          location.pathname === `/category/${group.groupCode}`
+                            ? "on"
+                            : ""
+                        }
+                      >
+                        {group.groupName}(테스트)
+                      </dt>
+                    </Link>
+                  ))
+                ) : (
+                  <p>카테고리를 불러오는 중입니다...</p>
+                )}
+              </dl>
             </li>
           </ul>
         </div>
