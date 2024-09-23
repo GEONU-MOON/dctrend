@@ -39,15 +39,34 @@ function CategoryPage() {
   const categories = useCategories();
   const { cleanHTMLContent } = useCleanHTML();
 
+  // 스크롤 위치 복원 함수
+  const restoreScrollPosition = () => {
+    const savedScrollPosition = sessionStorage.getItem(
+      `scrollPosition-${categoryId}`
+    );
+    if (savedScrollPosition) {
+      window.scrollTo(0, parseInt(savedScrollPosition, 10));
+    }
+  };
+
   // 데이터 로드 함수
   const loadNewsData = useCallback(
     (page = 1) => {
-      if (categories.length > 0) {
-        const categoryIdsByCode = getIdsByCode(categories, categoryId);
-        if (categoryIdsByCode) {
-          setIsLoading(true);
+      const cachedData = JSON.parse(
+        sessionStorage.getItem(`newsData-${categoryId}`)
+      );
 
-          setTimeout(() => {
+      // 캐싱된 데이터가 있고, 첫 번째 페이지라면 캐싱된 데이터를 먼저 불러옴
+      if (cachedData && page === 1 && cachedData.currentPage === currentPage) {
+        setNewsData(cachedData);
+        restoreScrollPosition();
+      } else {
+        // 새 데이터 요청
+        if (categories.length > 0) {
+          const categoryIdsByCode = getIdsByCode(categories, categoryId);
+          if (categoryIdsByCode) {
+            setIsLoading(true);
+
             axios
               .get(
                 `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
@@ -58,18 +77,16 @@ function CategoryPage() {
                 }
               )
               .then((response) => {
-                console.log(response.data.data);
                 if (response.data.message === "success") {
                   const newContent = response.data.data.newsList.content;
-                  console.log("Fetched news:", newContent);
-                  console.log("Fetched resents:", response.data.data.resents); // 추가된 로그
+
                   setNewsData((prevState) => {
                     const updatedContent =
                       page === 1
                         ? newContent
                         : [...prevState.newsList.content, ...newContent];
 
-                    return {
+                    const updatedData = {
                       ...prevState,
                       newsList: {
                         ...prevState.newsList,
@@ -77,7 +94,15 @@ function CategoryPage() {
                       },
                       resents: response.data.data.resents,
                       populars: response.data.data.populars,
+                      currentPage: page, // 페이지 정보 저장
                     };
+
+                    // 데이터 저장
+                    sessionStorage.setItem(
+                      `newsData-${categoryId}`,
+                      JSON.stringify(updatedData)
+                    );
+                    return updatedData;
                   });
 
                   setTotalPages(
@@ -91,11 +116,11 @@ function CategoryPage() {
               .finally(() => {
                 setIsLoading(false);
               });
-          }, 500);
+          }
         }
       }
     },
-    [categories, categoryId]
+    [categories, categoryId, currentPage]
   );
 
   // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
@@ -116,7 +141,6 @@ function CategoryPage() {
     (entries) => {
       const target = entries[0];
       if (target.isIntersecting && !isLoading && currentPage < totalPages) {
-        console.log("스크롤 끝에 도달, 다음 페이지 요청");
         setCurrentPage((prevPage) => prevPage + 1);
       }
     },
@@ -141,19 +165,24 @@ function CategoryPage() {
 
   // 페이지가 변경될 때마다 데이터 로드
   useEffect(() => {
-    if (currentPage === 1) {
-      setNewsData({
-        newsList: { content: [] },
-        resents: [],
-        populars: [],
-      }); // 기존 데이터 초기화
-    }
     loadNewsData(currentPage);
   }, [currentPage, categoryId, loadNewsData]);
 
   // 카테고리 변경 시 페이지를 초기화
   useEffect(() => {
     setCurrentPage(1); // 페이지 초기화
+  }, [categoryId]);
+
+  // 스크롤 위치 저장
+  useEffect(() => {
+    const handleScroll = () => {
+      sessionStorage.setItem(`scrollPosition-${categoryId}`, window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [categoryId]);
 
   return (
