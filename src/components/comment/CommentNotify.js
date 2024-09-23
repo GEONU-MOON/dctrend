@@ -15,7 +15,7 @@ function CommentNotify({ isOpen, onClose, id, type }) {
       const reasonsLoad = async () => {
         try {
           const response = await axios.get(
-            "https://api.trend.rankify.best/api/v1/common/report-reasons",
+            "https://api.trend.rankify.best/v1/common/report-reasons",
             {
               headers: {
                 "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
@@ -59,7 +59,7 @@ function CommentNotify({ isOpen, onClose, id, type }) {
       return;
     }
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/report`;
+      const url = `https://api.trend.rankify.best/v1/comments/report`;
       const params = {
         contentType: "NEWS",
         commentType: type,

@@ -17,7 +17,7 @@ function VoteBox({ initialGood, initialBad, id, type, state }) {
       return;
     }
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/news/${type}/${id}/${feel}`;
+      const url = `https://api.trend.rankify.best/v1/comments/news/${type}/${id}/${feel}`;
       const response = await axios.get(url, {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
