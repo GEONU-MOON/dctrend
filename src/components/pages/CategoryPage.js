@@ -34,6 +34,8 @@ function CategoryPage() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
   const pageSize = 12;
+  const recentNews = 5;
+  const popularNews = 5;
   const observerRef = useRef(); // Intersection Observer를 설정할 ref
 
   const categories = useCategories();
@@ -50,7 +52,7 @@ function CategoryPage() {
           setTimeout(() => {
             axios
               .get(
-                `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}`,
+                `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
                 {
                   headers: {
                     "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
