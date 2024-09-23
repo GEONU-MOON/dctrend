@@ -21,7 +21,7 @@ function CommentModify({ isOpen, onClose, isReset, id, txt, type }) {
       return;
     }
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/news/cofirm-password`;
+      const url = `https://api.trend.rankify.best/v1/comments/news/cofirm-password`;
       const params = {
         id: id,
         type: type,
@@ -66,7 +66,7 @@ function CommentModify({ isOpen, onClose, isReset, id, txt, type }) {
       return;
     }
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/news/update`;
+      const url = `https://api.trend.rankify.best/v1/comments/news/update`;
       const params = {
         id: id,
         type: type,

@@ -6,7 +6,7 @@ export const useCategories = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.trend.rankify.best/api/v1/news/categories/group", {
+      .get("https://api.trend.rankify.best/v1/news/categories/group", {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14", // API 키 추가
         },

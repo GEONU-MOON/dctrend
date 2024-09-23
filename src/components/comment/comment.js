@@ -16,7 +16,7 @@ function CommentWrap(props) {
 
   const fetchComment = async (page, sort, reset = false) => {
     try {
-      const url = `${apiUrl}api/v1/comments/news?entityId=${props.id}&page=${page}&size=10&sort=${sort}`;
+      const url = `${apiUrl}v1/comments/news?entityId=${props.id}&page=${page}&size=10&sort=${sort}`;
       const response = await axios.get(url, {
         headers: {
           "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",

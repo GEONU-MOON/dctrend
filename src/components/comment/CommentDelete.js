@@ -18,7 +18,7 @@ function CommentDelete({ isOpen, onClose, isReset, id, txt, type }) {
       return;
     }
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/news/delete`;
+      const url = `https://api.trend.rankify.best/v1/comments/news/delete`;
       const params = {
         id: id,
         type: type,

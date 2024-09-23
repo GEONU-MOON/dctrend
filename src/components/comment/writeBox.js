@@ -23,7 +23,7 @@ function WriteBox({
 
   const saveComment = async () => {
     try {
-      const url = `https://api.trend.rankify.best/api/v1/comments/news/save`;
+      const url = `https://api.trend.rankify.best/v1/comments/news/save`;
       const params = {
         comment: text,
         nickName: nick,
