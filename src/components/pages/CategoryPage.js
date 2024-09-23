@@ -528,8 +528,8 @@ function CategoryPage() {
 
                 <div className="stickyTitle">실시간 인기기사</div>
                 <div className="popularNewsRight">
-                  {newsData.resents.length > 0 ? (
-                    newsData.resents.slice(0, 5).map((recent, index) => (
+                  {newsData.populars.length > 0 ? (
+                    newsData.populars.slice(0, 5).map((recent, index) => (
                       <ul key={`${recent.newsId}-${index}`}>
                         <li>{index + 1}</li>
                         <li>
