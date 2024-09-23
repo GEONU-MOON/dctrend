@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { useSearchParams, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination as AntPagination } from "antd";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useCategories } from "../../hooks/useCategories";
 import "swiper/css";
@@ -12,7 +11,6 @@ import "swiper/css/pagination";
 import "../../css/common.css";
 import "../../css/layout.css";
 import { Spin } from "antd";
-// import "antd/dist/reset.css";
 import logo from "../../images/logo.svg";
 import icoTicket from "../../images/ico_ticket.png";
 import btnClose from "../../images/btn_close.svg";
