@@ -188,7 +188,7 @@ function CategoryPage() {
   return (
     <>
       <div>
-        <section className="contentsWrap" style={{ minHeight: "2024px" }}>
+        <section className="contentsWrap">
           <div className="newsLayout">
             <div className="leftWrap">
               <div className="newsList">
