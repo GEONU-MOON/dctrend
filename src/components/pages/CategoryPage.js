@@ -44,7 +44,6 @@ function CategoryPage() {
     const savedScrollPosition = sessionStorage.getItem(
       `scrollPosition-${categoryId}`
     );
-    // console.log(`Restoring scroll position: ${savedScrollPosition}`); // 복원할 위치 확인
     if (savedScrollPosition) {
       window.scrollTo(0, parseInt(savedScrollPosition, 10));
     }
@@ -56,86 +55,79 @@ function CategoryPage() {
       const cachedData = JSON.parse(
         sessionStorage.getItem(`newsData-${categoryId}`)
       );
-      console.log("Checking cached data:", cachedData); // 캐시된 데이터 확인
 
-      // 이미 로드된 페이지보다 큰 경우에만 새로 로드
-      if (cachedData && cachedData.currentPage >= page) {
-        setNewsData(cachedData);
-        console.log("Using cached data, restoring scroll position...");
-        restoreScrollPosition(); // 스크롤 위치 복원
-        setIsLoading(false); // 캐시된 데이터를 불러왔을 때 로딩 상태 해제
-      } else {
-        // API 호출로 새 데이터를 불러오는 경우
-        if (categories.length > 0) {
-          const categoryIdsByCode = getIdsByCode(categories, categoryId);
-          console.log("Category IDs:", categoryIdsByCode); // 카테고리 ID 확인
-          if (categoryIdsByCode) {
-            setIsLoading(true);
-
-            axios
-              .get(
-                `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
-                {
-                  headers: {
-                    "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
-                  },
-                }
-              )
-              .then((response) => {
-                console.log("API Response for page:", page, response.data); // API 응답 확인
-                if (response.data.message === "success") {
-                  const newContent = response.data.data.newsList.content;
-
-                  // 새 데이터 병합 로직
-                  setNewsData((prevState) => {
-                    const updatedContent =
-                      page === 1
-                        ? newContent // 첫 페이지라면 새로운 데이터로 대체
-                        : [...prevState.newsList.content, ...newContent]; // 기존 데이터에 새 데이터를 병합
-
-                    const updatedData = {
-                      ...prevState,
-                      newsList: {
-                        ...prevState.newsList,
-                        content: updatedContent, // 병합된 콘텐츠
-                      },
-                      resents: response.data.data.resents,
-                      populars: response.data.data.populars,
-                      currentPage: page, // 페이지 업데이트
-                    };
-
-                    console.log(
-                      "Updated data after merging page:",
-                      page,
-                      updatedData
-                    ); // 병합 후 데이터 확인
-
-                    // 병합된 데이터를 세션 스토리지에 저장
-                    sessionStorage.setItem(
-                      `newsData-${categoryId}`,
-                      JSON.stringify(updatedData)
-                    );
-
-                    return updatedData; // 상태 업데이트
-                  });
-
-                  setTotalPages(
-                    response.data.data.newsList.metadata.totalPages
-                  );
-                }
-              })
-              .catch((error) => {
-                console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
-              })
-              .finally(() => {
-                setIsLoading(false);
-              });
-          }
+      if (cachedData) {
+        // 캐시된 데이터가 있지만 추가로 더 로드할 페이지가 있으면 계속 로드
+        if (cachedData.currentPage >= page && currentPage < totalPages) {
+          setNewsData(cachedData);
+          fetchNewsDataFromAPI(page);
+        } else {
+          fetchNewsDataFromAPI(page);
         }
+      } else if (categories.length > 0) {
+        fetchNewsDataFromAPI(page);
       }
     },
-    [categories, categoryId, currentPage]
+    [categories, categoryId, currentPage, totalPages]
   );
+
+  const fetchNewsDataFromAPI = (page) => {
+    const categoryIdsByCode = getIdsByCode(categories, categoryId);
+
+    if (categoryIdsByCode) {
+      setIsLoading(true);
+
+      axios
+        .get(
+          `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
+          {
+            headers: {
+              "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.data.message === "success") {
+            const newContent = response.data.data.newsList.content;
+
+            // 새 데이터를 병합하는 로직
+            setNewsData((prevState) => {
+              const updatedContent =
+                page === 1
+                  ? newContent // 첫 페이지라면 새로운 데이터로 대체
+                  : [...prevState.newsList.content, ...newContent]; // 기존 데이터에 새 데이터를 병합
+
+              const updatedData = {
+                ...prevState,
+                newsList: {
+                  ...prevState.newsList,
+                  content: updatedContent, // 병합된 콘텐츠
+                },
+                resents: response.data.data.resents,
+                populars: response.data.data.populars,
+                currentPage: page, // 페이지 업데이트
+              };
+
+              // 병합된 데이터를 세션 스토리지에 저장
+              sessionStorage.setItem(
+                `newsData-${categoryId}`,
+                JSON.stringify(updatedData)
+              );
+
+              return updatedData; // 상태 업데이트
+            });
+
+            setTotalPages(response.data.data.newsList.metadata.totalPages);
+          }
+        })
+        .catch((error) => {
+          console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  };
 
   // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
   const getIdsByCode = (categories, categoryCode) => {
@@ -154,7 +146,6 @@ function CategoryPage() {
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
-      console.log("Is intersecting:", target.isIntersecting); // 교차 여부 확인
       if (target.isIntersecting && !isLoading && currentPage < totalPages) {
         setCurrentPage((prevPage) => prevPage + 1); // 페이지를 증가시켜 무한 스크롤 동작
       }
@@ -180,14 +171,10 @@ function CategoryPage() {
 
   // 컴포넌트가 마운트될 때 스크롤 위치 복원
   useEffect(() => {
-    console.log(
-      `Component mounted, restoring scroll position for categoryId: ${categoryId}`
-    );
     restoreScrollPosition(); // 컴포넌트가 처음 로드되거나 뒤로가기 했을 때 스크롤 복원
   }, [categoryId]);
 
   useEffect(() => {
-    console.log(`Loading page ${currentPage} of ${totalPages}`);
     loadNewsData(currentPage);
   }, [currentPage, categoryId, loadNewsData]);
 
@@ -206,7 +193,6 @@ function CategoryPage() {
   // 스크롤 위치 저장
   useEffect(() => {
     const handleScroll = () => {
-      // console.log("Current ScrollY:", window.scrollY); // 스크롤 위치 확인
       sessionStorage.setItem(`scrollPosition-${categoryId}`, window.scrollY);
     };
 
