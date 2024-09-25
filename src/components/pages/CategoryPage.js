@@ -18,6 +18,7 @@ import icoSearchGray from "../../images/ico_search_gray.svg";
 import icoLogout from "../../images/ico_logout.svg";
 import btnTop from "../../images/btn_top.svg";
 import useCleanHTML from "../../hooks/useCleanHtml";
+import { useScrollStore } from "../common/scrollStore";
 
 const apiUrl = "https://api.trend.rankify.best/";
 
@@ -35,6 +36,8 @@ function CategoryPage() {
   const recentNews = 5;
   const popularNews = 5;
   const observerRef = useRef(); // Intersection Observer를 설정할 ref
+  const { setTargetIndex } = useScrollStore(); // Zustand에서 인덱스 저장 함수 가져오기
+  const { targetIndex, resetTargetIndex } = useScrollStore(); // targetIndex와 resetTargetIndex 가져오기
 
   const categories = useCategories();
   const { cleanHTMLContent } = useCleanHTML();
@@ -55,9 +58,10 @@ function CategoryPage() {
       const cachedData = JSON.parse(
         sessionStorage.getItem(`newsData-${categoryId}`)
       );
+      console.log("로드된 캐시 데이터:", cachedData);
 
       if (cachedData) {
-        // 캐시된 데이터가 있지만 추가로 더 로드할 페이지가 있으면 계속 로드
+        console.log("캐시된 데이터 사용 중:", cachedData);
         if (cachedData.currentPage >= page && currentPage < totalPages) {
           setNewsData(cachedData);
           fetchNewsDataFromAPI(page);
@@ -72,6 +76,7 @@ function CategoryPage() {
   );
 
   const fetchNewsDataFromAPI = (page) => {
+    console.log("뉴스 데이터 API 호출 중...");
     const categoryIdsByCode = getIdsByCode(categories, categoryId);
 
     if (categoryIdsByCode) {
@@ -87,34 +92,35 @@ function CategoryPage() {
           }
         )
         .then((response) => {
+          console.log("API 응답:", response.data);
           if (response.data.message === "success") {
             const newContent = response.data.data.newsList.content;
+            console.log("새로 로드된 뉴스 데이터:", newContent);
 
-            // 새 데이터를 병합하는 로직
             setNewsData((prevState) => {
               const updatedContent =
                 page === 1
-                  ? newContent // 첫 페이지라면 새로운 데이터로 대체
-                  : [...prevState.newsList.content, ...newContent]; // 기존 데이터에 새 데이터를 병합
+                  ? newContent
+                  : [...prevState.newsList.content, ...newContent];
+              console.log("업데이트된 뉴스 리스트:", updatedContent);
 
               const updatedData = {
                 ...prevState,
                 newsList: {
                   ...prevState.newsList,
-                  content: updatedContent, // 병합된 콘텐츠
+                  content: updatedContent,
                 },
                 resents: response.data.data.resents,
                 populars: response.data.data.populars,
-                currentPage: page, // 페이지 업데이트
+                currentPage: page,
               };
 
-              // 병합된 데이터를 세션 스토리지에 저장
               sessionStorage.setItem(
                 `newsData-${categoryId}`,
                 JSON.stringify(updatedData)
               );
 
-              return updatedData; // 상태 업데이트
+              return updatedData;
             });
 
             setTotalPages(response.data.data.newsList.metadata.totalPages);
@@ -190,17 +196,86 @@ function CategoryPage() {
     }
   }, [categoryId]);
 
-  // 스크롤 위치 저장
   useEffect(() => {
-    const handleScroll = () => {
-      sessionStorage.setItem(`scrollPosition-${categoryId}`, window.scrollY);
-    };
+    if (targetIndex !== null) {
+      console.log("현재 타겟 인덱스:", targetIndex);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [categoryId]);
+      const requiredPage = Math.ceil((targetIndex + 1) / pageSize);
+      console.log("필요한 페이지:", requiredPage, "현재 페이지:", currentPage);
+
+      if (currentPage < requiredPage) {
+        console.log("필요한 페이지까지 로드 중:", requiredPage);
+        setCurrentPage(requiredPage); // 필요한 페이지까지 데이터를 로드
+      } else {
+        const targetElement = document.getElementById(
+          `news-item-${targetIndex}`
+        );
+        console.log("스크롤 복원할 타겟 요소:", targetElement);
+        if (targetElement) {
+          console.log(`스크롤 이동 - 인덱스: ${targetIndex}`);
+          targetElement.scrollIntoView({ behavior: "smooth" });
+          resetTargetIndex(); // 스크롤 완료 후 인덱스 초기화
+        }
+      }
+    } else {
+      console.log("targetIndex가 null입니다");
+    }
+  }, [
+    targetIndex,
+    currentPage,
+    pageSize,
+    newsData.newsList.content,
+    resetTargetIndex,
+  ]);
+
+  // 특정 인덱스로 스크롤 이동
+  useEffect(() => {
+    if (
+      targetIndex !== null &&
+      newsData.newsList.content.length > targetIndex
+    ) {
+      const targetElement = document.getElementById(`news-item-${targetIndex}`);
+
+      if (targetElement) {
+        console.log(`스크롤 이동 - 인덱스: ${targetIndex}`);
+        targetElement.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          resetTargetIndex(); // 스크롤 복원 후에만 인덱스 초기화
+        }, 500); // 일정 딜레이를 줘서 렌더링이 완료된 후 실행
+      } else {
+        console.log(
+          "타겟 요소를 찾지 못함. 데이터가 충분히 로드되지 않았을 수 있음."
+        );
+      }
+    } else {
+      console.log("targetIndex가 null이거나 데이터가 부족합니다.");
+    }
+  }, [targetIndex, newsData.newsList.content, resetTargetIndex]);
+
+  useEffect(() => {
+    if (targetIndex !== null) {
+      const requiredPage = Math.ceil((targetIndex + 1) / pageSize);
+      if (currentPage < requiredPage) {
+        console.log(`필요한 페이지 ${requiredPage}까지 로드 중`);
+        setCurrentPage(requiredPage);
+      } else {
+        const targetElement = document.getElementById(
+          `news-item-${targetIndex}`
+        );
+        console.log("스크롤 복원할 타겟 요소:", targetElement);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth" });
+          resetTargetIndex(); // 스크롤 완료 후에만 호출
+        }
+      }
+    }
+  }, [
+    targetIndex,
+    currentPage,
+    newsData.newsList.content,
+    pageSize,
+    resetTargetIndex,
+  ]);
 
   return (
     <>
@@ -216,8 +291,14 @@ function CategoryPage() {
                       <Link
                         to={`/category/${newsCategoryId}/news/${news.newsId}`}
                         key={`${news.newsId}-${index}`}
+                        onClick={() => {
+                          console.log(`인덱스 ${index} 게시물 클릭`);
+                          setTargetIndex(index); // 게시물 클릭 시 인덱스 저장
+                        }}
                       >
-                        <ul className="hoverImgPt">
+                        <ul id={`news-item-${index}`} className="hoverImgPt">
+                          {" "}
+                          {/* ID 추가 */}
                           <div className="thumb">
                             <img src={news.thumbnail} alt={news.title} />
                           </div>
@@ -235,6 +316,7 @@ function CategoryPage() {
                     );
                   })}
                 </div>
+
                 {/* 스피너를 목록 끝에 표시 */}
                 {isLoading && (
                   <div style={{ textAlign: "center", marginTop: "20px" }}>
