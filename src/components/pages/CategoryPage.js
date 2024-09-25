@@ -44,6 +44,7 @@ function CategoryPage() {
     const savedScrollPosition = sessionStorage.getItem(
       `scrollPosition-${categoryId}`
     );
+    console.log(`Restoring scroll position: ${savedScrollPosition}`); // 복원할 위치 확인
     if (savedScrollPosition) {
       window.scrollTo(0, parseInt(savedScrollPosition, 10));
     }
@@ -57,16 +58,10 @@ function CategoryPage() {
       );
       console.log("Cached data:", cachedData); // 캐시된 데이터 확인
 
-      if (cachedData && page === 1 && cachedData.currentPage === currentPage) {
+      if (cachedData && cachedData.currentPage === currentPage) {
         setNewsData(cachedData);
-        restoreScrollPosition();
-
-        // 스크롤 복원 후 IntersectionObserver를 다시 트리거
-        setTimeout(() => {
-          if (observerRef.current) {
-            observerRef.current.scrollIntoView();
-          }
-        }, 100);
+        console.log("Using cached data, restoring scroll position..."); // 캐시 확인
+        restoreScrollPosition(); // 스크롤 복원 추가
       } else {
         if (categories.length > 0) {
           const categoryIdsByCode = getIdsByCode(categories, categoryId);
@@ -190,6 +185,14 @@ function CategoryPage() {
     };
   }, [handleObserver]);
 
+  // 컴포넌트가 마운트될 때 스크롤 위치 복원
+  useEffect(() => {
+    console.log(
+      `Component mounted, restoring scroll position for categoryId: ${categoryId}`
+    );
+    restoreScrollPosition(); // 컴포넌트가 처음 로드되거나 뒤로가기 했을 때 스크롤 복원
+  }, [categoryId]);
+
   useEffect(() => {
     console.log(`Loading page ${currentPage} of ${totalPages}`);
     loadNewsData(currentPage);
@@ -203,6 +206,7 @@ function CategoryPage() {
   // 스크롤 위치 저장
   useEffect(() => {
     const handleScroll = () => {
+      console.log("Current ScrollY:", window.scrollY); // 스크롤 위치 확인
       sessionStorage.setItem(`scrollPosition-${categoryId}`, window.scrollY);
     };
 
