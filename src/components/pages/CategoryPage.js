@@ -44,7 +44,7 @@ function CategoryPage() {
     const savedScrollPosition = sessionStorage.getItem(
       `scrollPosition-${categoryId}`
     );
-    console.log(`Restoring scroll position: ${savedScrollPosition}`); // 복원할 위치 확인
+    // console.log(`Restoring scroll position: ${savedScrollPosition}`); // 복원할 위치 확인
     if (savedScrollPosition) {
       window.scrollTo(0, parseInt(savedScrollPosition, 10));
     }
@@ -56,15 +56,19 @@ function CategoryPage() {
       const cachedData = JSON.parse(
         sessionStorage.getItem(`newsData-${categoryId}`)
       );
-      console.log("Cached data:", cachedData); // 캐시된 데이터 확인
+      console.log("Checking cached data:", cachedData); // 캐시된 데이터 확인
 
-      if (cachedData && cachedData.currentPage === currentPage) {
+      // 이미 로드된 페이지보다 큰 경우에만 새로 로드
+      if (cachedData && cachedData.currentPage >= page) {
         setNewsData(cachedData);
-        console.log("Using cached data, restoring scroll position..."); // 캐시 확인
-        restoreScrollPosition(); // 스크롤 복원 추가
+        console.log("Using cached data, restoring scroll position...");
+        restoreScrollPosition(); // 스크롤 위치 복원
+        setIsLoading(false); // 캐시된 데이터를 불러왔을 때 로딩 상태 해제
       } else {
+        // API 호출로 새 데이터를 불러오는 경우
         if (categories.length > 0) {
           const categoryIdsByCode = getIdsByCode(categories, categoryId);
+          console.log("Category IDs:", categoryIdsByCode); // 카테고리 ID 확인
           if (categoryIdsByCode) {
             setIsLoading(true);
 
@@ -78,52 +82,41 @@ function CategoryPage() {
                 }
               )
               .then((response) => {
-                console.log("API Response:", response.data); // API 응답 확인
+                console.log("API Response for page:", page, response.data); // API 응답 확인
                 if (response.data.message === "success") {
                   const newContent = response.data.data.newsList.content;
 
+                  // 새 데이터 병합 로직
                   setNewsData((prevState) => {
                     const updatedContent =
                       page === 1
-                        ? newContent
-                        : [...prevState.newsList.content, ...newContent]; // 기존 데이터에 새 데이터 추가
+                        ? newContent // 첫 페이지라면 새로운 데이터로 대체
+                        : [...prevState.newsList.content, ...newContent]; // 기존 데이터에 새 데이터를 병합
 
                     const updatedData = {
                       ...prevState,
                       newsList: {
                         ...prevState.newsList,
-                        content: updatedContent,
+                        content: updatedContent, // 병합된 콘텐츠
                       },
                       resents: response.data.data.resents,
                       populars: response.data.data.populars,
-                      currentPage: page,
+                      currentPage: page, // 페이지 업데이트
                     };
 
-                    let mergedData = updatedData;
-                    if (cachedData && page > 1) {
-                      mergedData = {
-                        ...cachedData,
-                        newsList: {
-                          ...cachedData.newsList,
-                          content: [
-                            ...cachedData.newsList.content,
-                            ...newContent, // 기존 캐싱된 데이터에 새 데이터 추가
-                          ],
-                        },
-                        resents: response.data.data.resents,
-                        populars: response.data.data.populars,
-                        currentPage: page,
-                      };
-                    }
+                    console.log(
+                      "Updated data after merging page:",
+                      page,
+                      updatedData
+                    ); // 병합 후 데이터 확인
 
-                    console.log("Merged data:", mergedData); // 병합된 데이터 확인
-
+                    // 병합된 데이터를 세션 스토리지에 저장
                     sessionStorage.setItem(
                       `newsData-${categoryId}`,
-                      JSON.stringify(mergedData) // 병합된 데이터 캐싱
+                      JSON.stringify(updatedData)
                     );
 
-                    return mergedData; // 병합된 데이터를 상태에 반영
+                    return updatedData; // 상태 업데이트
                   });
 
                   setTotalPages(
@@ -163,7 +156,7 @@ function CategoryPage() {
       const target = entries[0];
       console.log("Is intersecting:", target.isIntersecting); // 교차 여부 확인
       if (target.isIntersecting && !isLoading && currentPage < totalPages) {
-        setCurrentPage((prevPage) => prevPage + 1);
+        setCurrentPage((prevPage) => prevPage + 1); // 페이지를 증가시켜 무한 스크롤 동작
       }
     },
     [currentPage, totalPages, isLoading]
@@ -200,13 +193,20 @@ function CategoryPage() {
 
   // 카테고리 변경 시 페이지를 초기화
   useEffect(() => {
-    setCurrentPage(1); // 페이지 초기화
+    const cachedData = JSON.parse(
+      sessionStorage.getItem(`newsData-${categoryId}`)
+    );
+
+    // 캐시된 데이터가 없다면 currentPage를 1로 초기화
+    if (!cachedData) {
+      setCurrentPage(1);
+    }
   }, [categoryId]);
 
   // 스크롤 위치 저장
   useEffect(() => {
     const handleScroll = () => {
-      console.log("Current ScrollY:", window.scrollY); // 스크롤 위치 확인
+      // console.log("Current ScrollY:", window.scrollY); // 스크롤 위치 확인
       sessionStorage.setItem(`scrollPosition-${categoryId}`, window.scrollY);
     };
 
