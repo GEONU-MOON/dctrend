@@ -18,142 +18,82 @@ import icoSearchGray from "../../images/ico_search_gray.svg";
 import icoLogout from "../../images/ico_logout.svg";
 import btnTop from "../../images/btn_top.svg";
 import useCleanHTML from "../../hooks/useCleanHtml";
-import { useScrollStore } from "../common/scrollStore";
 
 const apiUrl = "https://api.trend.rankify.best/";
 
 function CategoryPage() {
-  const { categoryId } = useParams();
+  const { categoryId } = useParams(); // 현재 카테고리 ID 추출
   const [newsData, setNewsData] = useState({
     newsList: { content: [] },
     resents: [],
     populars: [],
   });
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
-  const pageSize = 12;
-  const recentNews = 5;
-  const popularNews = 5;
+  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수 상태
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const pageSize = 12; // 페이지 크기 설정
   const observerRef = useRef(); // Intersection Observer를 설정할 ref
-  const { setTargetIndex } = useScrollStore(); // Zustand에서 인덱스 저장 함수 가져오기
-  const { targetIndex, resetTargetIndex } = useScrollStore(); // targetIndex와 resetTargetIndex 가져오기
+  const categories = useCategories(); // 사용자 정의 훅을 통해 카테고리 데이터 가져오기
+  const { cleanHTMLContent } = useCleanHTML(); // HTML 정리 훅 사용
 
-  const categories = useCategories();
-  const { cleanHTMLContent } = useCleanHTML();
-
-  // 스크롤 위치 복원 함수
-  const restoreScrollPosition = () => {
-    const savedScrollPosition = sessionStorage.getItem(
-      `scrollPosition-${categoryId}`
-    );
-    if (savedScrollPosition) {
-      window.scrollTo(0, parseInt(savedScrollPosition, 10));
-    }
-  };
-
-  // 데이터 로드 함수
-  const loadNewsData = useCallback(
-    (page = 1) => {
-      const cachedData = JSON.parse(
-        sessionStorage.getItem(`newsData-${categoryId}`)
-      );
-      console.log("로드된 캐시 데이터:", cachedData);
-
-      if (cachedData) {
-        console.log("캐시된 데이터 사용 중:", cachedData);
-        if (cachedData.currentPage >= page && currentPage < totalPages) {
-          setNewsData(cachedData);
-          fetchNewsDataFromAPI(page);
-        } else {
-          fetchNewsDataFromAPI(page);
-        }
-      } else if (categories.length > 0) {
-        fetchNewsDataFromAPI(page);
-      }
-    },
-    [categories, categoryId, currentPage, totalPages]
-  );
-
-  const fetchNewsDataFromAPI = (page) => {
-    console.log("뉴스 데이터 API 호출 중...");
-    const categoryIdsByCode = getIdsByCode(categories, categoryId);
-
-    if (categoryIdsByCode) {
-      setIsLoading(true);
-
-      axios
-        .get(
-          `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
-          {
-            headers: {
-              "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
-            },
-          }
-        )
-        .then((response) => {
-          console.log("API 응답:", response.data);
-          if (response.data.message === "success") {
-            const newContent = response.data.data.newsList.content;
-            console.log("새로 로드된 뉴스 데이터:", newContent);
-
-            setNewsData((prevState) => {
-              const updatedContent =
-                page === 1
-                  ? newContent
-                  : [...prevState.newsList.content, ...newContent];
-              console.log("업데이트된 뉴스 리스트:", updatedContent);
-
-              const updatedData = {
-                ...prevState,
-                newsList: {
-                  ...prevState.newsList,
-                  content: updatedContent,
-                },
-                resents: response.data.data.resents,
-                populars: response.data.data.populars,
-                currentPage: page,
-              };
-
-              sessionStorage.setItem(
-                `newsData-${categoryId}`,
-                JSON.stringify(updatedData)
-              );
-
-              return updatedData;
-            });
-
-            setTotalPages(response.data.data.newsList.metadata.totalPages);
-          }
-        })
-        .catch((error) => {
-          console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  };
-
-  // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
+  // 카테고리 코드로 ID를 찾는 함수
   const getIdsByCode = (categories, categoryCode) => {
     const categoryGroup = categories.find(
       (group) => group.groupCode === categoryCode
     );
-
     if (categoryGroup && categoryGroup.categories.length > 0) {
       return categoryGroup.categories.map((category) => category.id).join(",");
     }
-
     return null;
   };
+
+  // API에서 뉴스 데이터를 가져오는 함수
+  const fetchNewsDataFromAPI = useCallback(
+    (page) => {
+      const categoryIdsByCode = getIdsByCode(categories, categoryId);
+
+      if (categoryIdsByCode) {
+        setIsLoading(true); // 로딩 상태 설정
+        axios
+          .get(
+            `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}`,
+            {
+              headers: {
+                "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+              },
+            }
+          )
+          .then((response) => {
+            if (response.data.message === "success") {
+              const newContent = response.data.data.newsList.content;
+              setNewsData((prevState) => ({
+                ...prevState,
+                newsList: {
+                  ...prevState.newsList,
+                  content:
+                    page === 1
+                      ? newContent
+                      : [...prevState.newsList.content, ...newContent],
+                },
+              }));
+              setTotalPages(response.data.data.newsList.metadata.totalPages);
+            }
+          })
+          .catch((error) =>
+            console.error("뉴스 데이터를 가져오는 중 오류 발생:", error)
+          )
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [categories, categoryId]
+  );
 
   // Intersection Observer 콜백 함수
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
       if (target.isIntersecting && !isLoading && currentPage < totalPages) {
-        setCurrentPage((prevPage) => prevPage + 1); // 페이지를 증가시켜 무한 스크롤 동작
+        setCurrentPage((prevPage) => prevPage + 1);
       }
     },
     [currentPage, totalPages, isLoading]
@@ -161,121 +101,25 @@ function CategoryPage() {
 
   // Intersection Observer 설정
   useEffect(() => {
-    const option = {
-      root: null,
-      rootMargin: "20px",
-      threshold: 1.0,
-    };
-
+    const option = { root: null, rootMargin: "20px", threshold: 1.0 };
     const observer = new IntersectionObserver(handleObserver, option);
     if (observerRef.current) observer.observe(observerRef.current);
-
     return () => {
       if (observerRef.current) observer.unobserve(observerRef.current);
     };
   }, [handleObserver]);
 
-  // 컴포넌트가 마운트될 때 스크롤 위치 복원
+  // `categoryId`가 변경될 때 `currentPage` 초기화
   useEffect(() => {
-    restoreScrollPosition(); // 컴포넌트가 처음 로드되거나 뒤로가기 했을 때 스크롤 복원
+    setCurrentPage(1); // 카테고리 변경 시 페이지 초기화
   }, [categoryId]);
 
+  // 데이터 로드: 카테고리나 페이지가 변경될 때마다 호출
   useEffect(() => {
-    loadNewsData(currentPage);
-  }, [currentPage, categoryId, loadNewsData]);
-
-  // 카테고리 변경 시 페이지를 초기화
-  useEffect(() => {
-    const cachedData = JSON.parse(
-      sessionStorage.getItem(`newsData-${categoryId}`)
-    );
-
-    // 캐시된 데이터가 없다면 currentPage를 1로 초기화
-    if (!cachedData) {
-      setCurrentPage(1);
+    if (categories.length > 0) {
+      fetchNewsDataFromAPI(currentPage);
     }
-  }, [categoryId]);
-
-  useEffect(() => {
-    if (targetIndex !== null) {
-      console.log("현재 타겟 인덱스:", targetIndex);
-
-      const requiredPage = Math.ceil((targetIndex + 1) / pageSize);
-      console.log("필요한 페이지:", requiredPage, "현재 페이지:", currentPage);
-
-      if (currentPage < requiredPage) {
-        console.log("필요한 페이지까지 로드 중:", requiredPage);
-        setCurrentPage(requiredPage); // 필요한 페이지까지 데이터를 로드
-      } else {
-        const targetElement = document.getElementById(
-          `news-item-${targetIndex}`
-        );
-        console.log("스크롤 복원할 타겟 요소:", targetElement);
-        if (targetElement) {
-          console.log(`스크롤 이동 - 인덱스: ${targetIndex}`);
-          targetElement.scrollIntoView({ behavior: "smooth" });
-          resetTargetIndex(); // 스크롤 완료 후 인덱스 초기화
-        }
-      }
-    } else {
-      console.log("targetIndex가 null입니다");
-    }
-  }, [
-    targetIndex,
-    currentPage,
-    pageSize,
-    newsData.newsList.content,
-    resetTargetIndex,
-  ]);
-
-  // 특정 인덱스로 스크롤 이동
-  useEffect(() => {
-    if (
-      targetIndex !== null &&
-      newsData.newsList.content.length > targetIndex
-    ) {
-      const targetElement = document.getElementById(`news-item-${targetIndex}`);
-
-      if (targetElement) {
-        console.log(`스크롤 이동 - 인덱스: ${targetIndex}`);
-        targetElement.scrollIntoView({ behavior: "smooth" });
-        setTimeout(() => {
-          resetTargetIndex(); // 스크롤 복원 후에만 인덱스 초기화
-        }, 500); // 일정 딜레이를 줘서 렌더링이 완료된 후 실행
-      } else {
-        console.log(
-          "타겟 요소를 찾지 못함. 데이터가 충분히 로드되지 않았을 수 있음."
-        );
-      }
-    } else {
-      console.log("targetIndex가 null이거나 데이터가 부족합니다.");
-    }
-  }, [targetIndex, newsData.newsList.content, resetTargetIndex]);
-
-  useEffect(() => {
-    if (targetIndex !== null) {
-      const requiredPage = Math.ceil((targetIndex + 1) / pageSize);
-      if (currentPage < requiredPage) {
-        console.log(`필요한 페이지 ${requiredPage}까지 로드 중`);
-        setCurrentPage(requiredPage);
-      } else {
-        const targetElement = document.getElementById(
-          `news-item-${targetIndex}`
-        );
-        console.log("스크롤 복원할 타겟 요소:", targetElement);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: "smooth" });
-          resetTargetIndex(); // 스크롤 완료 후에만 호출
-        }
-      }
-    }
-  }, [
-    targetIndex,
-    currentPage,
-    newsData.newsList.content,
-    pageSize,
-    resetTargetIndex,
-  ]);
+  }, [currentPage, categories, fetchNewsDataFromAPI]);
 
   return (
     <>
@@ -293,7 +137,6 @@ function CategoryPage() {
                         key={`${news.newsId}-${index}`}
                         onClick={() => {
                           console.log(`인덱스 ${index} 게시물 클릭`);
-                          setTargetIndex(index); // 게시물 클릭 시 인덱스 저장
                         }}
                       >
                         <ul id={`news-item-${index}`} className="hoverImgPt">
