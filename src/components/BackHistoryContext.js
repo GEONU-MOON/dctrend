@@ -1,4 +1,5 @@
 import React, { createContext, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // 초기 컨텍스트 설정
 export const BackHistoryContext = createContext({
@@ -15,7 +16,17 @@ export const BackHistoryProvider = ({ children }) => {
     isBack: false, // 뒤로 가기 여부 확인
   });
 
-  // 뒤로가기를 감지하여 isBack 상태를 true로 설정
+  const location = useLocation();
+
+  useEffect(() => {
+    // 라우트가 변경될 때마다 `isBack` 플래그를 false로 설정
+    backHistory.current.isBack = false;
+    console.log(
+      "Location changed, setting isBack to false.",
+      location.pathname
+    );
+  }, [location]);
+
   useEffect(() => {
     const handlePopState = () => {
       backHistory.current.isBack = true;

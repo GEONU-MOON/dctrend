@@ -10,15 +10,13 @@ function App() {
   const categories = useCategories();
 
   return (
-    <BackHistoryProvider>
-      {" "}
-      {/* BackHistoryProvider로 감싸기 */}
-      <Router>
+    <Router>
+      <BackHistoryProvider>
         <Header categories={categories} />
         <AppRouter />
         <Footer />
-      </Router>
-    </BackHistoryProvider>
+      </BackHistoryProvider>
+    </Router>
   );
 }
 

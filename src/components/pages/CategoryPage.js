@@ -24,7 +24,8 @@ const apiUrl = "https://api.trend.rankify.best/";
 
 function CategoryPage() {
   const { categoryId } = useParams();
-  const { useRemState, useActive } = useBackControl("CategoryPage"); // `useBackControl`을 설정
+  const { useRemState, useActive, backContext } =
+    useBackControl("CategoryPage");
   const [newsData, setNewsData] = useRemState(
     {
       newsList: { content: [] },
@@ -35,19 +36,17 @@ function CategoryPage() {
   ); // useRemState로 상태 저장 및 복원
   const [totalPages, setTotalPages] = useRemState(1, "totalPages");
   const [currentPage, setCurrentPage] = useRemState(1, "currentPage");
-  console.log(
-    "CategoryPage: State Values - newsData:",
-    newsData,
-    "totalPages:",
-    totalPages,
-    "currentPage:",
-    currentPage
-  );
   const [isLoading, setIsLoading] = useState(false);
-  const pageSize = 12;
   const observerRef = useRef();
   const categories = useCategories();
-  const { cleanHTMLContent } = useCleanHTML(); // HTML 정리 훅 사용
+  const { cleanHTMLContent } = useCleanHTML();
+
+  // Ensure that window.__BACK_HISTORY__ is defined before use
+  useEffect(() => {
+    if (!window.__BACK_HISTORY__) {
+      window.__BACK_HISTORY__ = {};
+    }
+  }, []);
 
   const getIdsByCode = (categories, categoryCode) => {
     const categoryGroup = categories.find(
@@ -62,12 +61,11 @@ function CategoryPage() {
   const fetchNewsDataFromAPI = useCallback(
     (page) => {
       const categoryIdsByCode = getIdsByCode(categories, categoryId);
-      console.log("Fetching Data for Page:", page);
       if (categoryIdsByCode) {
         setIsLoading(true);
         axios
           .get(
-            `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}`,
+            `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=12`,
             {
               headers: {
                 "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
@@ -77,7 +75,6 @@ function CategoryPage() {
           .then((response) => {
             if (response.data.message === "success") {
               const newContent = response.data.data.newsList.content;
-              console.log("Fetched News Data:", newContent);
               setNewsData((prevState) => ({
                 ...prevState,
                 newsList: {
@@ -135,10 +132,10 @@ function CategoryPage() {
 
   // 뒤로가기 시 스크롤 위치 복원 활성화
   useActive(() => {
-    const savedScrollPos =
-      window.__BACK_HISTORY__[window.location.href]?.scrollPos;
-    console.log("useActive: Restoring Scroll Position to", savedScrollPos);
-    if (savedScrollPos) {
+    if (window.__BACK_HISTORY__?.[window.location.href]) {
+      const savedScrollPos =
+        window.__BACK_HISTORY__[window.location.href].scrollPos ?? 0;
+      console.log("useActive: Restoring Scroll Position to", savedScrollPos);
       setTimeout(() => window.scrollTo(0, savedScrollPos), 0);
     }
   }, [window.location.href]);
