@@ -18,105 +18,93 @@ import icoSearchGray from "../../images/ico_search_gray.svg";
 import icoLogout from "../../images/ico_logout.svg";
 import btnTop from "../../images/btn_top.svg";
 import useCleanHTML from "../../hooks/useCleanHtml";
+import { useBackControl } from "../../hooks/useBackControl";
 
 const apiUrl = "https://api.trend.rankify.best/";
 
 function CategoryPage() {
   const { categoryId } = useParams();
-  const [newsData, setNewsData] = useState({
-    newsList: { content: [] },
-    resents: [],
-    populars: [],
-  });
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
-  const pageSize = 12;
-  const recentNews = 5;
-  const popularNews = 5;
-  const observerRef = useRef(); // Intersection Observer를 설정할 ref
-
-  const categories = useCategories();
-  const { cleanHTMLContent } = useCleanHTML();
-
-  // 데이터 로드 함수
-  const loadNewsData = useCallback(
-    (page = 1) => {
-      if (categories.length > 0) {
-        const categoryIdsByCode = getIdsByCode(categories, categoryId);
-        if (categoryIdsByCode) {
-          setIsLoading(true);
-
-          setTimeout(() => {
-            axios
-              .get(
-                `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}&recentNews=${recentNews}&popularNews=${popularNews}`,
-                {
-                  headers: {
-                    "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
-                  },
-                }
-              )
-              .then((response) => {
-                console.log(response.data.data);
-                if (response.data.message === "success") {
-                  const newContent = response.data.data.newsList.content;
-                  console.log("Fetched news:", newContent);
-                  console.log("Fetched resents:", response.data.data.resents); // 추가된 로그
-                  setNewsData((prevState) => {
-                    const updatedContent =
-                      page === 1
-                        ? newContent
-                        : [...prevState.newsList.content, ...newContent];
-
-                    return {
-                      ...prevState,
-                      newsList: {
-                        ...prevState.newsList,
-                        content: updatedContent,
-                      },
-                      resents: response.data.data.resents,
-                      populars: response.data.data.populars,
-                    };
-                  });
-
-                  setTotalPages(
-                    response.data.data.newsList.metadata.totalPages
-                  );
-                }
-              })
-              .catch((error) => {
-                console.error("뉴스 데이터를 가져오는 중 오류 발생:", error);
-              })
-              .finally(() => {
-                setIsLoading(false);
-              });
-          }, 100);
-        }
-      }
+  const { useRemState, useActive } = useBackControl("CategoryPage"); // `useBackControl`을 설정
+  const [newsData, setNewsData] = useRemState(
+    {
+      newsList: { content: [] },
+      resents: [],
+      populars: [],
     },
-    [categories, categoryId]
+    "newsData"
+  ); // useRemState로 상태 저장 및 복원
+  const [totalPages, setTotalPages] = useRemState(1, "totalPages");
+  const [currentPage, setCurrentPage] = useRemState(1, "currentPage");
+  console.log(
+    "CategoryPage: State Values - newsData:",
+    newsData,
+    "totalPages:",
+    totalPages,
+    "currentPage:",
+    currentPage
   );
+  const [isLoading, setIsLoading] = useState(false);
+  const pageSize = 12;
+  const observerRef = useRef();
+  const categories = useCategories();
+  const { cleanHTMLContent } = useCleanHTML(); // HTML 정리 훅 사용
 
-  // 카테고리 코드로 ID를 찾는 함수 (여러 카테고리 매칭)
   const getIdsByCode = (categories, categoryCode) => {
     const categoryGroup = categories.find(
       (group) => group.groupCode === categoryCode
     );
-
     if (categoryGroup && categoryGroup.categories.length > 0) {
       return categoryGroup.categories.map((category) => category.id).join(",");
     }
-
     return null;
   };
+
+  const fetchNewsDataFromAPI = useCallback(
+    (page) => {
+      const categoryIdsByCode = getIdsByCode(categories, categoryId);
+      console.log("Fetching Data for Page:", page);
+      if (categoryIdsByCode) {
+        setIsLoading(true);
+        axios
+          .get(
+            `${apiUrl}v1/news?categoryIds=${categoryIdsByCode}&page=${page}&size=${pageSize}`,
+            {
+              headers: {
+                "X-API-KEY": "AdswKr3yJ5lHkWllQUr6adnY9Q4aoqHh0KfwBeyb14",
+              },
+            }
+          )
+          .then((response) => {
+            if (response.data.message === "success") {
+              const newContent = response.data.data.newsList.content;
+              console.log("Fetched News Data:", newContent);
+              setNewsData((prevState) => ({
+                ...prevState,
+                newsList: {
+                  ...prevState.newsList,
+                  content:
+                    page === 1
+                      ? newContent
+                      : [...prevState.newsList.content, ...newContent],
+                },
+              }));
+              setTotalPages(response.data.data.newsList.metadata.totalPages);
+            }
+          })
+          .catch((error) =>
+            console.error("뉴스 데이터를 가져오는 중 오류 발생:", error)
+          )
+          .finally(() => setIsLoading(false));
+      }
+    },
+    [categories, categoryId]
+  );
 
   // Intersection Observer 콜백 함수
   const handleObserver = useCallback(
     (entries) => {
       const target = entries[0];
       if (target.isIntersecting && !isLoading && currentPage < totalPages) {
-        console.log("스크롤 끝에 도달, 다음 페이지 요청");
         setCurrentPage((prevPage) => prevPage + 1);
       }
     },
@@ -125,36 +113,35 @@ function CategoryPage() {
 
   // Intersection Observer 설정
   useEffect(() => {
-    const option = {
-      root: null,
-      rootMargin: "20px",
-      threshold: 1.0,
-    };
-
+    const option = { root: null, rootMargin: "20px", threshold: 1.0 };
     const observer = new IntersectionObserver(handleObserver, option);
     if (observerRef.current) observer.observe(observerRef.current);
-
     return () => {
       if (observerRef.current) observer.unobserve(observerRef.current);
     };
   }, [handleObserver]);
 
-  // 페이지가 변경될 때마다 데이터 로드
+  // `categoryId`가 변경될 때 `currentPage` 초기화
   useEffect(() => {
-    if (currentPage === 1) {
-      setNewsData({
-        newsList: { content: [] },
-        resents: [],
-        populars: [],
-      }); // 기존 데이터 초기화
-    }
-    loadNewsData(currentPage);
-  }, [currentPage, categoryId, loadNewsData]);
-
-  // 카테고리 변경 시 페이지를 초기화
-  useEffect(() => {
-    setCurrentPage(1); // 페이지 초기화
+    setCurrentPage(1); // 카테고리 변경 시 페이지 초기화
   }, [categoryId]);
+
+  // 데이터 로드: 카테고리나 페이지가 변경될 때마다 호출
+  useEffect(() => {
+    if (categories.length > 0) {
+      fetchNewsDataFromAPI(currentPage);
+    }
+  }, [currentPage, categories, fetchNewsDataFromAPI]);
+
+  // 뒤로가기 시 스크롤 위치 복원 활성화
+  useActive(() => {
+    const savedScrollPos =
+      window.__BACK_HISTORY__[window.location.href]?.scrollPos;
+    console.log("useActive: Restoring Scroll Position to", savedScrollPos);
+    if (savedScrollPos) {
+      setTimeout(() => window.scrollTo(0, savedScrollPos), 0);
+    }
+  }, [window.location.href]);
 
   return (
     <>
@@ -171,7 +158,9 @@ function CategoryPage() {
                         to={`/category/${newsCategoryId}/news/${news.newsId}`}
                         key={`${news.newsId}-${index}`}
                       >
-                        <ul className="hoverImgPt">
+                        <ul id={`news-item-${index}`} className="hoverImgPt">
+                          {" "}
+                          {/* ID 추가 */}
                           <div className="thumb">
                             <img src={news.thumbnail} alt={news.title} />
                           </div>
@@ -189,6 +178,7 @@ function CategoryPage() {
                     );
                   })}
                 </div>
+
                 {/* 스피너를 목록 끝에 표시 */}
                 {isLoading && (
                   <div style={{ textAlign: "center", marginTop: "20px" }}>
